@@ -51,6 +51,12 @@ for (const file of publicFiles) {
 }
 
 await mkdir(appDir, { recursive: true });
+const portfolioPdf = await readFile(path.join(root, '小红书搜索链路优化作品集.pdf'));
+await writeFile(
+  path.join(appDir, 'generated-pdf.ts'),
+  `export const PORTFOLIO_PDF_BASE64 = ${JSON.stringify(portfolioPdf.toString('base64'))};\n`,
+  'utf8'
+);
 await writeFile(
   path.join(appDir, 'generated-html.ts'),
   `export const INDEX_HTML = ${JSON.stringify(html)};\n`,
