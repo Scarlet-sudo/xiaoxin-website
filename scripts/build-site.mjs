@@ -48,6 +48,11 @@ const INDEX_HTML = ${JSON.stringify(indexHtml)};
 
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+    if (url.pathname === "/__asset-debug") {
+      return new Response(JSON.stringify({ keys: Object.keys(env || {}) }), { headers: { "content-type": "application/json" } });
+    }
+
     if (env.ASSETS) {
       const assetResponse = await env.ASSETS.fetch(request);
       if (assetResponse.status !== 404) {
@@ -55,7 +60,6 @@ export default {
       }
     }
 
-    const url = new URL(request.url);
     if (url.pathname.startsWith("/assets/")) {
       return new Response("Not found", { status: 404 });
     }
