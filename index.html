@@ -1,0 +1,3466 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WANGHAIXIN</title>
+  <style>
+    :root {
+      --hero-bg: #c8cbe0;
+      --paper-bg: #fbf7f1;
+      --white: #ffffff;
+      --ink-soft: rgba(255, 255, 255, 0.86);
+      --soft-shadow: 0 26px 70px rgba(91, 74, 48, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 400vh;
+      margin: 0;
+      color: var(--white);
+      background: var(--paper-bg);
+      font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      height: 100vh;
+      min-height: 620px;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.16) 0 16%, transparent 42%),
+        radial-gradient(circle at 50% 100%, rgba(111, 116, 164, 0.16) 0 34%, transparent 64%),
+        linear-gradient(145deg, #d3d4e9 0%, #c5c9e2 48%, #b5bad8 100%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='0.8' fill='white' fill-opacity='0.34'/%3E%3C/svg%3E");
+      background-size: 18px 18px;
+      opacity: 0.22;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 47%, transparent 0 42%, rgba(92, 96, 137, 0.14) 100%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(96, 99, 143, 0.1));
+      mix-blend-mode: multiply;
+      opacity: 0.72;
+    }
+
+    .hero-title {
+      position: absolute;
+      z-index: 2;
+      top: 4vh;
+      left: 4vw;
+      right: 4vw;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.48);
+      font-family: Impact, Haettenschweiler, "Arial Black", sans-serif;
+      font-size: clamp(5.8rem, 16.4vw, 18.4rem);
+      font-weight: 900;
+      line-height: 0.82;
+      letter-spacing: 0.035em;
+      white-space: nowrap;
+      transform: translateY(30px);
+      opacity: 0;
+      animation: title-rise 0.9s cubic-bezier(0.18, 0.84, 0.28, 1) 0.12s forwards;
+      text-align: center;
+    }
+
+    .copy {
+      position: absolute;
+      z-index: 4;
+      top: 34.3vh;
+      left: 6vw;
+      width: min(39vw, 430px);
+      color: var(--ink-soft);
+      font-size: clamp(1.18rem, 1.55vw, 1.65rem);
+      font-weight: 300;
+      line-height: 1.58;
+      letter-spacing: 0.02em;
+    }
+
+    .figure-stage {
+      position: absolute;
+      z-index: 3;
+      left: 50%;
+      bottom: 8.7vh;
+      width: min(47vw, 700px);
+      height: 76vh;
+      transform: translate(-50%, 14px);
+      opacity: 0;
+      display: grid;
+      align-items: end;
+      justify-items: center;
+      pointer-events: none;
+      animation: figure-enter 0.75s ease-out 0.2s forwards;
+    }
+
+    #sourceVideo {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #figureCanvas {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+      filter: brightness(0.94) contrast(1.05) saturate(1.04);
+    }
+
+    .figure-poster {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .figure-stage.video-failed #figureCanvas {
+      opacity: 0;
+    }
+
+    .figure-stage.video-failed .figure-poster {
+      opacity: 1;
+    }
+
+    .puzzle {
+      position: absolute;
+      z-index: 4;
+      width: clamp(70px, 7.1vw, 116px);
+      aspect-ratio: 1.1;
+      color: rgba(255, 255, 255, 0.92);
+      filter: drop-shadow(0 5px 5px rgba(94, 98, 128, 0.08));
+      opacity: 0;
+      transform: translateY(12px);
+      animation: quiet-enter 0.58s ease-out forwards;
+    }
+
+    .puzzle svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transform: rotate(var(--r));
+    }
+
+    .puzzle.one { left: 8.1vw; bottom: 15.5vh; --r: -1deg; animation-delay: 0.48s; }
+    .puzzle.two { left: 28vw; bottom: 10.8vh; --r: -7deg; animation-delay: 0.58s; }
+    .puzzle.three { left: 63.6vw; bottom: 10.9vh; --r: 1deg; animation-delay: 0.68s; }
+    .puzzle.four { left: 86vw; bottom: 15.2vh; --r: 2deg; animation-delay: 0.78s; }
+
+    .start-link {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      bottom: 3.5vh;
+      display: inline-flex;
+      align-items: center;
+      gap: clamp(18px, 1.7vw, 28px);
+      color: rgba(255, 255, 255, 0.86);
+      font-size: clamp(0.98rem, 1.2vw, 1.28rem);
+      font-weight: 300;
+      letter-spacing: 0.42em;
+      text-decoration: none;
+      transform: translate(-50%, 12px);
+      opacity: 0;
+      cursor: pointer;
+      outline: none;
+      animation: start-enter 0.58s ease-out 0.98s forwards;
+      transition: color 260ms ease-out, transform 260ms ease-out;
+    }
+
+    .start-link span {
+      display: inline-block;
+      transform: translateX(0.35em);
+    }
+
+    .start-link::after {
+      content: "→";
+      width: auto;
+      height: auto;
+      background: none;
+      clip-path: none;
+      transform: translateY(-0.02em);
+      transform-origin: center;
+      opacity: 0.9;
+      transition: transform 260ms ease-out, opacity 260ms ease-out;
+    }
+
+    .start-link::before {
+      content: none;
+    }
+
+    .start-link:hover,
+    .start-link:focus-visible {
+      color: rgba(255, 255, 255, 1);
+      transform: translate(calc(-50% + 6px), 0);
+    }
+
+    .start-link:hover::after,
+    .start-link:focus-visible::after {
+      opacity: 1;
+      transform: translate(8px, 0.02em);
+    }
+
+    .next-panel {
+      position: relative;
+      z-index: 20;
+      min-height: 100vh;
+      padding: clamp(28px, 4.2vh, 46px) clamp(52px, 6vw, 100px) clamp(26px, 3.6vh, 38px);
+      color: #111111;
+      background:
+        radial-gradient(circle at 53% 39%, rgba(255, 255, 255, 0.92) 0 20%, rgba(255, 255, 255, 0) 58%),
+        radial-gradient(circle at 9% 18%, rgba(244, 225, 202, 0.34), transparent 34%),
+        radial-gradient(circle at 92% 84%, rgba(222, 214, 246, 0.24), transparent 38%),
+        radial-gradient(circle at 72% 10%, rgba(209, 223, 202, 0.16), transparent 32%),
+        linear-gradient(145deg, #fffdf9 0%, #fbf7f1 50%, #f2ece5 100%);
+      overflow: hidden;
+    }
+
+    .next-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at center, transparent 0 54%, rgba(118, 95, 70, 0.105) 100%),
+        url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='4' cy='6' r='0.55' fill='%23846f5b' fill-opacity='0.16'/%3E%3Ccircle cx='17' cy='13' r='0.45' fill='%23846f5b' fill-opacity='0.12'/%3E%3C/svg%3E");
+      opacity: 0.56;
+    }
+
+    .hero + .next-panel {
+      margin-top: 100vh;
+    }
+
+    .character-nav {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: min(60vw, 1010px);
+      margin: 0 auto;
+    }
+
+    .character-nav::before {
+      content: "";
+      position: absolute;
+      top: 27px;
+      left: 30px;
+      right: 30px;
+      height: 1px;
+      background: rgba(130, 124, 116, 0.44);
+      z-index: -1;
+    }
+
+    .nav-step {
+      display: grid;
+      justify-items: start;
+      gap: 14px;
+      color: #111111;
+      font-weight: 800;
+      font-size: clamp(1rem, 1.2vw, 1.3rem);
+      line-height: 1.35;
+      text-decoration: none;
+      outline: none;
+      transition: color 220ms ease-out, transform 220ms ease-out;
+    }
+
+    .nav-step:hover,
+    .nav-step:focus-visible {
+      color: #7a55c7;
+      transform: translateY(-2px);
+    }
+
+    .nav-step:nth-child(n + 2) {
+      justify-items: center;
+    }
+
+    .nav-step:last-child {
+      justify-items: end;
+      text-align: left;
+    }
+
+    .step-dot {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border: 1.25px solid rgba(126, 92, 196, 0.62);
+      border-radius: 50%;
+      background: rgba(255, 253, 249, 0.82);
+      color: #111111;
+      font-size: 1.55rem;
+      font-weight: 900;
+    }
+
+    .nav-step.is-active {
+      color: #7a55c7;
+    }
+
+    .nav-step.is-active .step-dot {
+      color: #ffffff;
+      border-color: transparent;
+      background: #7b55c9;
+    }
+
+    .character-figure {
+      position: absolute;
+      left: 1.9vw;
+      bottom: 0;
+      z-index: 2;
+      width: min(35vw, 575px);
+      height: 74vh;
+      pointer-events: none;
+    }
+
+    #characterVideo {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #characterCanvas,
+    .character-poster {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: left bottom;
+    }
+
+    #characterCanvas {
+      filter: brightness(0.98) contrast(1.03) saturate(1.04);
+    }
+
+    .character-poster {
+      opacity: 1;
+    }
+
+    .character-figure.has-video .character-poster {
+      opacity: 0;
+    }
+
+    .character-figure.has-video #characterCanvas {
+      opacity: 1;
+    }
+
+    .character-figure.video-failed #characterCanvas {
+      opacity: 0;
+    }
+
+    .character-figure.video-failed .character-poster {
+      opacity: 1;
+    }
+
+    .character-heading {
+      position: relative;
+      z-index: 3;
+      width: min(60vw, 1080px);
+      margin: clamp(24px, 3.9vh, 38px) 5vw 0 auto;
+      text-align: center;
+    }
+
+    .character-heading h2 {
+      margin: 0;
+      font-size: clamp(2rem, 2.8vw, 3.4rem);
+      line-height: 1;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      color: #080808;
+    }
+
+    .character-heading p {
+      margin: 14px 0 0;
+      color: #896bd1;
+      font-family: "Comic Sans MS", "Bradley Hand ITC", "Segoe Print", cursive;
+      font-size: clamp(1.25rem, 1.8vw, 2rem);
+      font-style: italic;
+      letter-spacing: 0.14em;
+    }
+
+    .character-cards {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(24px, 2vw, 34px);
+      width: min(60vw, 1080px);
+      margin: clamp(22px, 3.4vh, 34px) 5vw 0 auto;
+    }
+
+    .character-card {
+      min-height: clamp(250px, 31vh, 382px);
+      padding: clamp(18px, 1.8vh, 28px) clamp(20px, 1.8vw, 30px);
+      border: 1px solid rgba(195, 187, 179, 0.52);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.54);
+      box-shadow: 0 20px 46px rgba(76, 60, 42, 0.08);
+      backdrop-filter: blur(3px);
+      display: grid;
+      grid-template-rows: clamp(52px, 6vh, 64px) clamp(72px, 9vh, 86px) 1px 1fr;
+      align-content: start;
+      row-gap: clamp(12px, 1.7vh, 18px);
+    }
+
+    .card-head {
+      display: grid;
+      grid-template-columns: clamp(38px, 3.8vw, 48px) 1fr;
+      align-items: center;
+      gap: clamp(14px, 1.4vw, 20px);
+      min-height: 0;
+    }
+
+    .card-icon {
+      width: clamp(38px, 3.8vw, 48px);
+      height: clamp(38px, 3.8vw, 48px);
+      color: #111111;
+      overflow: visible;
+    }
+
+    .card-icon .accent {
+      fill: rgba(137, 107, 209, 0.28);
+      stroke: #111111;
+    }
+
+    .character-card:nth-child(1) .card-icon .accent {
+      transform-origin: 32px 32px;
+      animation: eye-blink 4.4s ease-in-out infinite;
+    }
+
+    .character-card:nth-child(2) .card-icon circle {
+      fill: currentColor;
+      fill-opacity: 0;
+      transform-origin: 27px 27px;
+      animation: lens-shadow 4.8s ease-in-out infinite;
+    }
+
+    .character-card:nth-child(3) .card-icon {
+      transform-origin: 18px 34px;
+      animation: flag-wave 3.8s ease-in-out infinite;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: clamp(1.16rem, 1.32vw, 1.7rem);
+      line-height: 1.2;
+      letter-spacing: 0.03em;
+      font-weight: 800;
+    }
+
+    .card-title small {
+      display: block;
+      margin-top: 4px;
+      color: #5f5f62;
+      font-size: 0.66em;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .card-lead {
+      margin: 0;
+      min-height: 0;
+      font-size: clamp(0.92rem, 0.95vw, 1.14rem);
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .card-rule {
+      height: 1px;
+      margin: 0;
+      background: rgba(137, 107, 209, 0.34);
+    }
+
+    .card-evidence {
+      margin: 0;
+      color: #8a6cd0;
+      font-size: clamp(0.92rem, 0.98vw, 1.1rem);
+      line-height: 1.55;
+      font-weight: 600;
+    }
+
+    .section-cta {
+      position: absolute;
+      z-index: 4;
+      right: clamp(82px, 7vw, 128px);
+      bottom: clamp(24px, 3.7vh, 44px);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      min-width: 176px;
+      height: 48px;
+      padding: 0 24px 0 32px;
+      border-radius: 13px;
+      color: #ffffff;
+      background: #845ed0;
+      text-decoration: none;
+      font-size: 1.33rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      box-shadow: 0 18px 36px rgba(94, 70, 154, 0.14);
+      transition: transform 240ms ease-out, background 240ms ease-out;
+    }
+
+    .section-cta::after {
+      content: "→";
+      width: auto;
+      height: auto;
+      background: none;
+      transform: translateY(-0.03em);
+      font-size: 1.25em;
+      letter-spacing: 0;
+    }
+
+    .section-cta:hover,
+    .section-cta:focus-visible {
+      background: #7650c4;
+      transform: translateX(5px);
+    }
+
+    .section-cta.is-back {
+      right: auto;
+      left: clamp(72px, 5.5vw, 104px);
+      min-width: 160px;
+      padding: 0 34px 0 24px;
+      color: #111111;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .section-cta.is-back::before {
+      content: "←";
+      width: auto;
+      height: auto;
+      background: none;
+      transform: translateY(-0.03em);
+      font-size: 1.25em;
+      letter-spacing: 0;
+    }
+
+    .section-cta.is-back::after {
+      content: none;
+    }
+
+    .section-cta.is-pink,
+    .nav-step.theme-pink.is-active .step-dot {
+      background: #fb5870;
+    }
+
+    .nav-step.theme-pink.is-active {
+      color: #fb5870;
+    }
+
+    .section-cta.is-blue,
+    .nav-step.theme-blue.is-active .step-dot {
+      background: #2d91e7;
+    }
+
+    .nav-step.theme-blue.is-active {
+      color: #2d91e7;
+    }
+
+    .step-dot.is-done-purple {
+      color: #ffffff;
+      border-color: transparent;
+      background: #7b55c9;
+    }
+
+    .step-dot.is-done-gray {
+      color: #ffffff;
+      border-color: transparent;
+      background: #6f7373;
+    }
+
+    .step-dot.is-done-pink {
+      color: #ffffff;
+      border-color: transparent;
+      background: #fb5870;
+    }
+
+    .step-dot.is-done-blue {
+      color: #ffffff;
+      border-color: transparent;
+      background: #2d91e7;
+    }
+
+    .cutout-figure {
+      position: absolute;
+      z-index: 2;
+      pointer-events: none;
+      isolation: isolate;
+    }
+
+    .figure-stage::after,
+    .character-figure::after,
+    .cutout-figure::after {
+      content: "";
+      position: absolute;
+      left: 19%;
+      right: 19%;
+      bottom: 0.5%;
+      height: 9%;
+      z-index: 0;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(75, 62, 47, 0.18), rgba(75, 62, 47, 0) 68%);
+      filter: blur(5px);
+      pointer-events: none;
+    }
+
+    .cutout-figure video {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .cutout-figure canvas,
+    .cutout-figure img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: var(--figure-position, left bottom);
+    }
+
+    .cutout-figure canvas {
+      z-index: 2;
+      opacity: 1;
+      transition: opacity 240ms ease-out;
+    }
+
+    .cutout-figure img {
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 180ms ease-out;
+    }
+
+    .cutout-figure.has-video img {
+      opacity: 0;
+    }
+
+    .cutout-figure.has-video canvas {
+      opacity: 1;
+    }
+
+    .cutout-figure.video-failed canvas {
+      opacity: 0;
+    }
+
+    .cutout-figure.video-failed img {
+      opacity: 1;
+    }
+
+    .page-heading {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+    }
+
+    .page-heading h2 {
+      margin: 0;
+      color: #080808;
+      font-size: clamp(2.35rem, 3.4vw, 4.2rem);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.08em;
+    }
+
+    .page-heading p {
+      margin: 16px 0 0;
+      font-family: "Comic Sans MS", "Bradley Hand ITC", "Segoe Print", cursive;
+      font-size: clamp(1.25rem, 1.8vw, 2rem);
+      font-style: italic;
+      letter-spacing: 0.14em;
+    }
+
+    .skills-figure {
+      left: -6vw;
+      bottom: 1.5vh;
+      width: min(56vw, 850px);
+      height: 84vh;
+      --draw-scale: 1.2;
+      --draw-shift-x: -0.03;
+      --draw-shift-y: 0.03;
+    }
+
+    .skills-heading {
+      width: min(60vw, 980px);
+      margin: clamp(26px, 4vh, 42px) 6vw 0 auto;
+    }
+
+    .skills-heading p,
+    .nav-step.theme-gray.is-active {
+      color: #6f7373;
+    }
+
+    .nav-step.theme-gray.is-active .step-dot,
+    .section-cta.is-gray {
+      background: #6f7373;
+    }
+
+    .skills-grid {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(30px, 2.7vw, 50px);
+      width: min(61vw, 1120px);
+      margin: clamp(44px, 5.5vh, 62px) 2.6vw 0 auto;
+    }
+
+    .skill-column {
+      position: relative;
+      padding-top: 30px;
+    }
+
+    .skill-label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 172px;
+      height: 38px;
+      border-radius: 15px;
+      background: rgba(111, 115, 115, 0.12);
+      color: #111111;
+      font-size: 1.24rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      transform: translateY(-50%);
+    }
+
+    .skill-panel {
+      border: 1px solid rgba(150, 145, 137, 0.62);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.48);
+      padding: clamp(20px, 1.45vw, 28px);
+      height: 100%;
+      min-height: clamp(340px, 35vh, 390px);
+      box-shadow: var(--soft-shadow);
+      display: grid;
+      grid-template-rows: auto repeat(3, minmax(76px, 1fr));
+      align-items: stretch;
+    }
+
+    .skill-group-title {
+      margin: 0 0 15px;
+      color: #6f7373;
+      font-size: clamp(0.95rem, 0.95vw, 1.08rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .skill-item {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 18px;
+      padding: 0 18px;
+      margin: 0;
+      border-bottom: 1px solid rgba(150, 145, 137, 0.28);
+      border-radius: 12px;
+      align-items: center;
+      transition: background 220ms ease-out, padding 220ms ease-out, transform 220ms ease-out;
+    }
+
+    .skill-item > div,
+    .build-row > div {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .skill-item:hover,
+    .skill-item:focus-visible,
+    .skill-item.is-expanded {
+      background: rgba(255, 255, 255, 0.58);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .skill-item:last-child {
+      margin-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .skill-icon {
+      width: 42px;
+      height: 42px;
+      color: #111111;
+      align-self: center;
+      overflow: visible;
+      transform-origin: center;
+      animation: sun-bounce 3.8s ease-in-out infinite;
+    }
+
+    .skill-item:nth-of-type(2) .skill-icon {
+      animation-name: icon-sway;
+      animation-duration: 4.2s;
+      animation-delay: -0.8s;
+    }
+
+    .skill-item:nth-of-type(3) .skill-icon {
+      animation-name: icon-rotate-tilt;
+      animation-duration: 4.8s;
+      animation-delay: -1.2s;
+    }
+
+    .skill-item h3 {
+      margin: 0;
+      font-size: clamp(1.46rem, 1.52vw, 1.9rem);
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .build-row h3 {
+      margin: 0;
+      font-size: clamp(1.46rem, 1.52vw, 1.9rem);
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .skill-item p {
+      margin: 0;
+      font-size: clamp(0.86rem, 0.86vw, 1rem);
+      line-height: 1.62;
+    }
+
+    .skill-tags {
+      margin-top: 6px;
+      color: #5f5f62;
+      font-size: clamp(0.72rem, 0.72vw, 0.86rem);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .skill-column:first-child .skill-item h3 {
+      letter-spacing: 0.025em;
+    }
+
+    .skill-column:first-child .skill-item p {
+      font-size: clamp(0.9rem, 0.9vw, 1.04rem);
+      line-height: 1.78;
+      letter-spacing: 0.035em;
+    }
+
+    .skill-column:first-child .skill-tags {
+      line-height: 1.64;
+      letter-spacing: 0.045em;
+    }
+
+    .build-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .build-row {
+      display: grid;
+      grid-template-columns: 50px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 0 18px;
+      border-bottom: 1px solid rgba(150, 145, 137, 0.22);
+      border-radius: 12px;
+      transition: background 220ms ease-out, transform 220ms ease-out;
+    }
+
+    .build-row:last-child {
+      border-bottom: 0;
+    }
+
+    .build-row:hover,
+    .build-row:focus-visible,
+    .build-row.is-expanded {
+      background: rgba(255, 255, 255, 0.58);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .build-row:nth-of-type(2) .skill-icon {
+      animation-name: icon-sway;
+      animation-duration: 4.2s;
+      animation-delay: -1.2s;
+    }
+
+    .build-row:nth-of-type(3) .skill-icon {
+      animation-name: icon-rotate-tilt;
+      animation-duration: 4.8s;
+      animation-delay: -2.4s;
+    }
+
+    .build-definition {
+      position: relative;
+      margin: 0 0 7px;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      column-gap: 10px;
+      align-items: start;
+      color: #161616;
+      font-size: clamp(0.9rem, 0.9vw, 1.04rem);
+      line-height: 1.46;
+      font-weight: 800;
+      letter-spacing: 0.035em;
+    }
+
+    .build-examples {
+      position: relative;
+      margin: 0;
+      padding-left: 0;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      column-gap: 10px;
+      align-items: start;
+      color: #6f7373;
+      font-size: clamp(0.72rem, 0.74vw, 0.86rem);
+      line-height: 1.44;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .build-definition::before,
+    .build-examples::before {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 20px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      line-height: 1;
+      letter-spacing: 0.12em;
+    }
+
+    .build-definition::before {
+      content: "定义";
+      color: #ffffff;
+      background: #6f7373;
+      transform: translateY(-1px);
+    }
+
+    .build-examples::before {
+      content: "举例";
+      color: #6f7373;
+      background: rgba(111, 115, 115, 0.12);
+    }
+
+    .works-heading {
+      margin-top: clamp(26px, 4vh, 42px);
+    }
+
+    .works-heading p {
+      color: #fb5870;
+    }
+
+    .works-stage {
+      position: relative;
+      z-index: 3;
+      width: min(78vw, 1220px);
+      height: clamp(410px, 56vh, 560px);
+      margin: clamp(12px, 1.8vh, 22px) auto 0;
+    }
+
+    .work-arc {
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      top: 22%;
+      height: 200px;
+      border-top: 2px dashed rgba(251, 88, 112, 0.72);
+      border-radius: 50% 50% 0 0;
+      pointer-events: none;
+    }
+
+    .laptop-link {
+      position: absolute;
+      display: block;
+      width: var(--laptop-w);
+      color: #111111;
+      text-decoration: none;
+      transform: rotate(var(--rotate, 0deg));
+      transition: transform 220ms ease-out, filter 220ms ease-out;
+      cursor: pointer;
+    }
+
+    .laptop-link:hover,
+    .laptop-link:focus-visible,
+    .laptop-link.is-selected {
+      transform: rotate(var(--rotate, 0deg)) translateY(-8px);
+      filter: drop-shadow(0 20px 18px rgba(251, 88, 112, 0.14));
+      outline: none;
+    }
+
+    .laptop-link.left { --laptop-w: min(22.5vw, 370px); --rotate: -12deg; left: 1.8%; top: 20%; }
+    .laptop-link.center { --laptop-w: min(20vw, 330px); left: 39%; top: 2%; z-index: 5; }
+    .laptop-link.right { --laptop-w: min(18.5vw, 305px); --rotate: 10deg; right: 1.4%; top: 23%; }
+
+    .laptop-screen {
+      aspect-ratio: 1.55;
+      border: 8px solid #111111;
+      border-bottom-width: 12px;
+      border-radius: 10px 10px 5px 5px;
+      background: #fff9f3;
+      box-shadow: 0 20px 28px rgba(42, 30, 22, 0.13);
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    .laptop-link.left .laptop-screen,
+    .laptop-link.right .laptop-screen {
+      aspect-ratio: 2.05;
+    }
+
+    .laptop-link.left .laptop-screen {
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(251, 88, 112, 0.55) transparent;
+    }
+
+    .laptop-link.right .laptop-screen {
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(251, 88, 112, 0.45) transparent;
+    }
+
+    .laptop-link.left .laptop-screen::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .laptop-link.right .laptop-screen::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .laptop-link.left .laptop-screen::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(251, 88, 112, 0.55);
+    }
+
+    .laptop-link.right .laptop-screen::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(251, 88, 112, 0.45);
+    }
+
+    .laptop-base {
+      width: 112%;
+      height: 14px;
+      margin: -2px 0 0 -6%;
+      border-radius: 0 0 44px 44px;
+      background: #121212;
+      box-shadow: 0 8px 8px rgba(30, 20, 18, 0.12);
+    }
+
+    .laptop-screen h3 {
+      margin: 0 0 6px;
+      font-size: clamp(0.82rem, 1.15vw, 1.35rem);
+      line-height: 1;
+    }
+
+    .laptop-screen p {
+      margin: 0 0 7px;
+      font-size: clamp(0.58rem, 0.62vw, 0.74rem);
+      font-weight: 700;
+    }
+
+    .laptop-screen small {
+      display: block;
+      margin-bottom: 8px;
+      color: #fb5870;
+      font-size: clamp(0.72rem, 0.75vw, 0.9rem);
+      font-weight: 800;
+    }
+
+    .screen-thumb {
+      height: 58%;
+      border-radius: 8px;
+      background: #f9b7b8;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .screen-thumb span {
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .screen-thumb.product {
+      background: #d9e7bf;
+    }
+
+    .screen-thumb.intern {
+      background: #eee9e2;
+    }
+
+    .work-copy {
+      display: grid;
+      gap: 4px;
+      margin-top: 6px;
+      color: #111111;
+      font-size: clamp(0.5rem, 0.52vw, 0.62rem);
+      line-height: 1.18;
+      font-weight: 600;
+    }
+
+    .work-copy strong {
+      font-weight: 900;
+    }
+
+    .work-copy span {
+      display: block;
+      padding: 3px 5px;
+      border-radius: 6px;
+      background: rgba(251, 88, 112, 0.12);
+    }
+
+    .laptop-link.center .work-copy span {
+      background: rgba(145, 177, 95, 0.18);
+    }
+
+    .laptop-link.right .work-copy span {
+      background: rgba(111, 115, 115, 0.1);
+    }
+
+    .laptop-link.left .work-copy {
+      gap: 4px;
+      font-size: clamp(0.62rem, 0.64vw, 0.8rem);
+      line-height: 1.28;
+    }
+
+    .laptop-link.right .laptop-screen h3 {
+      font-size: clamp(0.98rem, 1.18vw, 1.46rem);
+    }
+
+    .laptop-link.right .laptop-screen p {
+      font-size: clamp(0.66rem, 0.72vw, 0.88rem);
+    }
+
+    .laptop-link.right .work-copy {
+      font-size: clamp(0.64rem, 0.68vw, 0.84rem);
+      line-height: 1.25;
+      gap: 5px;
+    }
+
+    .laptop-link.center .laptop-screen h3 {
+      font-size: clamp(1.18rem, 1.48vw, 1.76rem);
+      margin-bottom: 6px;
+    }
+
+    .laptop-link.center .laptop-screen p {
+      font-size: clamp(0.72rem, 0.88vw, 1rem);
+      margin-bottom: 8px;
+    }
+
+    .laptop-link.center .laptop-screen small {
+      font-size: clamp(0.9rem, 1.08vw, 1.25rem);
+      margin-bottom: 8px;
+    }
+
+    .laptop-link.center .work-copy {
+      font-size: clamp(0.72rem, 0.78vw, 0.92rem);
+      line-height: 1.24;
+      gap: 6px;
+    }
+
+  .works-figure {
+    left: 50%;
+    top: clamp(232px, 27vh, 246px);
+    bottom: auto;
+    width: min(35vw, 560px);
+    height: 58vh;
+    transform: translateX(-50%);
+    --figure-position: center bottom;
+    --draw-scale: 2.05;
+    --draw-shift-y: 1.05;
+    --subject-top: 0.01;
+    z-index: 4;
+  }
+
+    .works-figure img {
+      object-fit: cover;
+      object-position: center 6%;
+      transform: scale(1.22);
+      transform-origin: center 8%;
+    }
+
+    .works-figure canvas {
+      filter: brightness(0.92) contrast(0.97) saturate(0.96);
+    }
+
+    .skills-figure canvas,
+    .why-figure canvas,
+    .final-figure canvas {
+      filter: brightness(0.9) contrast(0.96) saturate(0.95);
+    }
+
+    .why-figure {
+      left: -3.8vw;
+      bottom: 0;
+      width: min(33vw, 540px);
+      height: 80vh;
+    }
+
+    .why-heading {
+      width: min(62vw, 1040px);
+      margin: clamp(62px, 8vh, 88px) 5vw 0 auto;
+    }
+
+    .why-heading p {
+      color: #5f8a61;
+    }
+
+    .timeline {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 26px;
+      width: min(68vw, 1160px);
+      margin: clamp(52px, 7vh, 82px) 2.5vw 0 auto;
+    }
+
+    .timeline::before {
+      content: none;
+    }
+
+    .timeline-wave {
+      position: absolute;
+      left: 3%;
+      right: 3%;
+      top: 38px;
+      width: 94%;
+      height: 84px;
+      overflow: visible;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .timeline-wave path {
+      stroke-dasharray: 10 10;
+      animation: route-drift 12s linear infinite;
+    }
+
+    .timeline-item {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      text-align: center;
+      gap: 18px;
+      font-size: clamp(0.98rem, 1.06vw, 1.2rem);
+      line-height: 1.5;
+      z-index: 1;
+      border: 0;
+      background: transparent;
+      color: #111111;
+      font: inherit;
+      cursor: pointer;
+      transition: color 220ms ease-out, transform 220ms ease-out;
+    }
+
+    .timeline-item:hover,
+    .timeline-item:focus-visible,
+    .timeline-item.is-reached {
+      color: #2d91e7;
+      transform: translateY(-3px);
+      outline: none;
+    }
+
+    .timeline-icon {
+      width: 46px;
+      height: 46px;
+      color: #111111;
+      animation: icon-float 5.6s ease-in-out infinite;
+      transition: color 220ms ease-out, transform 220ms ease-out;
+    }
+
+    .timeline-item:nth-of-type(2) .timeline-icon { animation-delay: -0.8s; }
+    .timeline-item:nth-of-type(3) .timeline-icon { animation-delay: -1.6s; }
+    .timeline-item:nth-of-type(4) .timeline-icon { animation-delay: -2.4s; }
+    .timeline-item:nth-of-type(5) .timeline-icon { animation-delay: -3.2s; }
+    .timeline-item:nth-of-type(6) .timeline-icon { animation-delay: -4s; }
+    .timeline-item:nth-of-type(7) .timeline-icon { animation-delay: -4.8s; }
+
+    .timeline-item.is-reached .timeline-icon {
+      color: #2d91e7;
+      transform: scale(1.08);
+    }
+
+    .timeline-dot {
+      width: 13px;
+      height: 13px;
+      border: 1.5px solid #111111;
+      border-radius: 50%;
+      background: #fbf7f1;
+      z-index: 2;
+      transition: background 220ms ease-out, border-color 220ms ease-out, transform 220ms ease-out, box-shadow 220ms ease-out;
+    }
+
+    .timeline-item.is-reached .timeline-dot {
+      border-color: #2d91e7;
+      background: #2d91e7;
+      transform: scale(1.25);
+      box-shadow: 0 0 0 8px rgba(45, 145, 231, 0.12);
+    }
+
+    .timeline-dot.is-pink {
+      background: #fb5870;
+    }
+
+    .timeline-dot.is-blue {
+      background: #2d91e7;
+    }
+
+    .timeline-item strong {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 1.08em;
+    }
+
+    .timeline-item em {
+      display: block;
+      margin-top: 12px;
+      color: #5f8a61;
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .timeline-item:last-child .timeline-icon {
+      transform: translateY(12px);
+    }
+
+    .timeline-item:last-child .timeline-dot {
+      transform: translateY(28px);
+    }
+
+    .timeline-item:last-child p {
+      transform: translateY(16px);
+    }
+
+    .here-note {
+      position: absolute;
+      right: clamp(80px, 7vw, 130px);
+      top: 35vh;
+      color: #2d91e7;
+      font-size: 1.25rem;
+      line-height: 1.35;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      opacity: 0.64;
+      transition: opacity 240ms ease-out, transform 240ms ease-out;
+    }
+
+    .timeline.is-complete + .here-note {
+      opacity: 1;
+      transform: translateY(-5px);
+    }
+
+    .trajectory-label {
+      position: relative;
+      z-index: 3;
+      width: min(62vw, 1040px);
+      margin: 12px 5vw 0 auto;
+      color: #5f8a61;
+      font-size: clamp(0.88rem, 0.95vw, 1.08rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    .final-panel {
+      display: grid;
+      grid-template-columns: 54% 46%;
+      align-items: center;
+      padding-top: clamp(120px, 15vh, 155px);
+      min-height: 100vh;
+    }
+
+    .final-panel .character-nav {
+      position: absolute;
+      top: clamp(28px, 4.2vh, 46px);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .puzzle-wall {
+      position: relative;
+      z-index: 2;
+      height: 58vh;
+      min-height: 430px;
+      transform: translateY(44px);
+    }
+
+    .soft-piece {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 34px;
+      box-shadow: 0 24px 44px rgba(86, 68, 45, 0.14), inset 0 9px 20px rgba(255, 255, 255, 0.42), inset 0 -10px 18px rgba(92, 70, 50, 0.055);
+      color: #111111;
+      font-size: 1.35rem;
+      font-weight: 700;
+      overflow: visible;
+    }
+
+    .soft-piece span {
+      position: relative;
+      z-index: 2;
+    }
+
+    .soft-piece span::before {
+      display: block;
+      margin: 0 auto 14px;
+      color: #111111;
+      font-size: 2.7rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .soft-piece.one span::before { content: "☰"; transform: rotate(90deg); }
+    .soft-piece.two span::before { content: "◎"; }
+    .soft-piece.three span::before { content: "☆"; }
+    .soft-piece.four span::before { content: "⌖"; }
+
+    .soft-piece::before {
+      box-shadow: inherit;
+    }
+
+    .soft-piece::after {
+      box-shadow: 0 10px 22px rgba(86, 68, 45, 0.08), inset 0 7px 16px rgba(255, 255, 255, 0.32);
+    }
+
+    .soft-piece::before,
+    .soft-piece::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .soft-piece small {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--piece-color);
+      font-size: 1.35rem;
+    }
+
+    .soft-piece.one { left: 0; top: 0; width: 47%; height: 42%; background: radial-gradient(circle at 28% 18%, rgba(255,255,255,.34), transparent 28%), #ded2f6; --piece-color: #7b55c9; border-radius: 38px 24px 20px 34px; }
+    .soft-piece.one::after { right: -24px; top: 43%; width: 58px; height: 58px; background: #ded2f6; }
+    .soft-piece.one::before { display: none; }
+    .soft-piece.two { left: 47%; top: 0; width: 45%; height: 42%; background: radial-gradient(circle at 30% 15%, rgba(255,255,255,.4), transparent 30%), #efeee9; --piece-color: #6f7373; border-radius: 24px 38px 34px 20px; }
+    .soft-piece.two::before { display: none; }
+    .soft-piece.two::after { right: -22px; top: 45%; width: 52px; height: 52px; background: #efeee9; }
+    .soft-piece.three { left: 0; top: 42%; width: 47%; height: 42%; background: radial-gradient(circle at 22% 18%, rgba(255,255,255,.34), transparent 30%), #ffd1d1; --piece-color: #fb5870; border-radius: 30px 18px 34px 38px; }
+    .soft-piece.three::before { left: -24px; top: 43%; width: 56px; height: 56px; background: #ffd1d1; }
+    .soft-piece.three::after { display: none; }
+    .soft-piece.four { left: 47%; top: 42%; width: 45%; height: 42%; background: radial-gradient(circle at 30% 18%, rgba(255,255,255,.36), transparent 30%), #d7e8ff; --piece-color: #2d91e7; border-radius: 20px 30px 38px 24px; }
+    .soft-piece.four::before { left: -23px; top: 43%; width: 54px; height: 54px; background: #d7e8ff; }
+    .soft-piece.four::after { right: -25px; top: 45%; width: 56px; height: 56px; background: #d7e8ff; }
+
+    .final-figure {
+      left: 21%;
+      bottom: 2vh;
+      width: min(29vw, 470px);
+      height: 66vh;
+      --figure-position: center bottom;
+      z-index: 4;
+    }
+
+    .final-copy {
+      position: relative;
+      z-index: 3;
+      color: #111111;
+      transform: translateY(58px);
+    }
+
+    .final-copy h2 {
+      margin: 0 0 8px;
+      font-family: "Comic Sans MS", "Segoe Print", "Bradley Hand ITC", cursive;
+      font-size: clamp(2.35rem, 3.05vw, 3.85rem);
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .final-copy .english {
+      margin: 0 0 40px;
+      color: #5f8a61;
+      font-family: "Comic Sans MS", "Bradley Hand ITC", "Segoe Print", cursive;
+      font-size: clamp(1rem, 1.32vw, 1.55rem);
+      font-style: italic;
+      letter-spacing: 0.12em;
+    }
+
+    .final-copy p {
+      margin: 0 0 12px;
+      font-size: clamp(1.2rem, 1.65vw, 1.9rem);
+      line-height: 1.45;
+    }
+
+    .final-actions {
+      display: flex;
+      gap: 36px;
+      margin-top: 70px;
+    }
+
+    .final-button {
+      width: 224px;
+      min-height: 78px;
+      border: 1px solid #6da061;
+      border-radius: 14px;
+      background: transparent;
+      color: #5f8a3c;
+      font: inherit;
+      font-size: 1.35rem;
+      line-height: 1.18;
+      cursor: pointer;
+    }
+
+    .final-button strong {
+      display: block;
+      font-size: 1.45rem;
+      font-weight: 500;
+    }
+
+    .final-button.is-filled {
+      color: #ffffff;
+      border-color: transparent;
+      background: #5c9a41;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background: rgba(20, 18, 16, 0.34);
+    }
+
+    .modal.is-open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(560px, 92vw);
+      border-radius: 18px;
+      background: #fbf7f1;
+      color: #111111;
+      padding: 34px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+    }
+
+    .modal-box h3 {
+      margin: 0 0 16px;
+      font-size: 1.8rem;
+    }
+
+    .modal-box p {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .modal-close {
+      margin-top: 22px;
+      height: 44px;
+      padding: 0 24px;
+      border: 0;
+      border-radius: 12px;
+      color: #ffffff;
+      background: #845ed0;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @keyframes title-rise {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes figure-enter {
+      to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes quiet-enter {
+      to {
+        transform: translateY(0);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes start-enter {
+      to {
+        transform: translate(-50%, 0);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes eye-blink {
+      0%, 18%, 28%, 100% {
+        transform: scaleY(1);
+      }
+      22% {
+        transform: scaleY(0.08);
+      }
+    }
+
+    @keyframes lens-shadow {
+      0%, 100% {
+        transform: scale(1);
+        fill-opacity: 0;
+      }
+      52% {
+        transform: scale(1.18);
+        fill-opacity: 0.24;
+      }
+    }
+
+    @keyframes flag-wave {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      45% {
+        transform: rotate(-4deg);
+      }
+      70% {
+        transform: rotate(3deg);
+      }
+    }
+
+    @keyframes icon-float {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-4px) scale(1.035);
+      }
+    }
+
+    @keyframes sun-bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      45% {
+        transform: translateY(-12px);
+      }
+      62% {
+        transform: translateY(3px);
+      }
+    }
+
+    @keyframes icon-sway {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      35% {
+        transform: translateX(-11px);
+      }
+      68% {
+        transform: translateX(11px);
+      }
+    }
+
+    @keyframes icon-rotate-tilt {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      48% {
+        transform: rotate(45deg);
+      }
+    }
+
+    @keyframes route-drift {
+      to {
+        stroke-dashoffset: -120;
+      }
+    }
+
+    @media (min-width: 901px) {
+      .skill-item p,
+      .skill-tags,
+      .build-definition,
+      .build-examples {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 260ms ease-out, opacity 220ms ease-out, margin 220ms ease-out;
+      }
+
+      .skill-item:hover p,
+      .skill-item:hover .skill-tags,
+      .skill-item.is-expanded p,
+      .skill-item.is-expanded .skill-tags,
+      .build-row:hover .build-definition,
+      .build-row:hover .build-examples,
+      .build-row.is-expanded .build-definition,
+      .build-row.is-expanded .build-examples {
+        max-height: 150px;
+        opacity: 1;
+      }
+
+      .skill-tags {
+        margin-top: 0;
+      }
+
+      .skill-item:hover .skill-tags,
+      .skill-item.is-expanded .skill-tags {
+        margin-top: 6px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        min-height: 580px;
+      }
+
+      .hero-title {
+        top: 6vh;
+        left: 50%;
+        right: auto;
+        font-size: clamp(4.4rem, 21vw, 9rem);
+        letter-spacing: 0.025em;
+        transform: translate(-50%, 30px);
+      }
+
+      @keyframes title-rise {
+        to {
+          transform: translate(-50%, 0);
+          opacity: 1;
+        }
+      }
+
+      .figure-stage {
+        width: min(60vw, 360px);
+        height: 64vh;
+        bottom: 10vh;
+      }
+
+      .copy {
+        top: 27vh;
+        left: 26px;
+        width: 42vw;
+        font-size: clamp(1.05rem, 4vw, 1.6rem);
+      }
+
+      .puzzle.two,
+      .puzzle.three {
+        display: none;
+      }
+
+      .puzzle.one {
+        left: 8vw;
+      }
+
+      .puzzle.four {
+        right: 8vw;
+      }
+
+      .next-panel {
+        padding: 28px 24px 56px;
+      }
+
+      .character-nav {
+        width: 100%;
+        font-size: 0.8rem;
+      }
+
+      .character-nav::before {
+        top: 22px;
+      }
+
+      .step-dot {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2rem;
+      }
+
+      .character-figure {
+        position: relative;
+        left: auto;
+        width: min(88vw, 420px);
+        height: 42vh;
+        margin: 28px auto 0;
+      }
+
+      .character-heading {
+        width: 100%;
+        margin-top: 32px;
+      }
+
+      .character-cards {
+        width: 100%;
+        grid-template-columns: 1fr;
+        margin-top: 28px;
+      }
+
+      .character-card {
+        min-height: auto;
+      }
+
+      .section-cta {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        margin: 28px 0 0 auto;
+      }
+
+      .section-cta.is-back {
+        left: auto;
+        margin-right: auto;
+        margin-left: 0;
+      }
+
+      .skills-figure,
+      .why-figure,
+      .works-figure,
+      .final-figure {
+        position: relative;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        transform: none;
+        width: min(88vw, 420px);
+        height: 38vh;
+        margin: 26px auto 0;
+      }
+
+      .skills-heading,
+      .why-heading,
+      .trajectory-label {
+        width: 100%;
+        margin: 28px auto 0;
+      }
+
+      .skills-grid {
+        width: 100%;
+        grid-template-columns: 1fr;
+        gap: 36px;
+        margin: 42px auto 0;
+      }
+
+      .works-stage {
+        width: 100%;
+        height: auto;
+        display: grid;
+        gap: 24px;
+      }
+
+      .work-arc {
+        display: none;
+      }
+
+      .laptop-link {
+        position: relative;
+        width: min(86vw, 420px) !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        margin: 0 auto;
+        transform: none;
+      }
+
+      .laptop-link:hover,
+      .laptop-link:focus-visible {
+        transform: translateY(-6px);
+      }
+
+      .timeline {
+        width: 100%;
+        grid-template-columns: 1fr;
+        margin: 34px auto 0;
+      }
+
+      .timeline::before {
+        display: none;
+      }
+
+      .here-note {
+        position: relative;
+        right: auto;
+        top: auto;
+        margin: 20px 0 0;
+      }
+
+      .final-panel {
+        display: block;
+      }
+
+      .final-panel .character-nav {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+      }
+
+      .puzzle-wall {
+        height: 52vh;
+        min-height: 360px;
+        margin-top: 30px;
+      }
+
+      .final-copy {
+        margin-top: 26px;
+        text-align: center;
+      }
+
+      .final-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 34px;
+      }
+    }
+
+    @media (min-width: 901px) and (max-height: 780px) {
+      .next-panel {
+        height: 100vh;
+        padding-top: 24px;
+        padding-bottom: 22px;
+      }
+
+      .character-nav {
+        width: min(62vw, 940px);
+      }
+
+      .step-dot {
+        width: 48px;
+        height: 48px;
+        font-size: 1.35rem;
+      }
+
+      .nav-step {
+        gap: 10px;
+        font-size: 1rem;
+      }
+
+      .character-nav::before {
+        top: 24px;
+      }
+
+      .skills-heading {
+        margin-top: 20px;
+      }
+
+      .page-heading h2 {
+        font-size: clamp(2.15rem, 3vw, 3rem);
+      }
+
+      .page-heading p {
+        margin-top: 10px;
+        font-size: clamp(1.1rem, 1.55vw, 1.55rem);
+      }
+
+      .skills-grid {
+        width: min(56vw, 880px);
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        margin-top: 18px;
+        margin-right: 2vw;
+        gap: 22px;
+        height: 410px;
+        align-items: stretch;
+      }
+
+      .skill-column {
+        height: 100%;
+        min-height: 0;
+        padding-top: 20px;
+      }
+
+      .skill-panel {
+        padding: 16px 20px;
+        height: calc(100% - 20px);
+        overflow: visible;
+      }
+
+      .skill-label {
+        min-width: 148px;
+        height: 32px;
+        border-radius: 13px;
+        font-size: 1.05rem;
+      }
+
+      .skill-group-title {
+        margin-bottom: 11px;
+        font-size: 0.88rem;
+      }
+
+      .skill-item {
+        grid-template-columns: 42px 1fr;
+        gap: 13px;
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+      }
+
+      .skill-icon {
+        width: 34px;
+        height: 34px;
+      }
+
+      .skill-item h3,
+      .build-row h3 {
+        margin-bottom: 6px;
+        font-size: 0.92rem;
+      }
+
+      .skill-item p,
+      .build-row p {
+        font-size: 0.68rem;
+        line-height: 1.38;
+      }
+
+      .skill-column:first-child .skill-item p {
+        font-size: 0.72rem;
+        line-height: 1.58;
+        letter-spacing: 0.035em;
+      }
+
+      .skill-column:first-child .skill-tags {
+        line-height: 1.44;
+        letter-spacing: 0.04em;
+      }
+
+      .skill-tags {
+        margin-top: 5px;
+        font-size: 0.6rem;
+        line-height: 1.28;
+      }
+
+      .build-definition {
+        margin-bottom: 4px;
+        font-size: 0.66rem;
+        line-height: 1.28;
+        letter-spacing: 0.03em;
+      }
+
+      .build-examples {
+        padding-left: 34px;
+        font-size: 0.55rem;
+        line-height: 1.2;
+        letter-spacing: 0.035em;
+      }
+
+      .build-definition::before,
+      .build-examples::before {
+        height: 17px;
+        font-size: 0.55rem;
+      }
+
+      .build-examples::before {
+        width: 30px;
+      }
+
+      .build-list {
+        gap: 6px;
+      }
+
+      .build-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .build-row .skill-icon {
+        display: none;
+      }
+
+      .skills-figure {
+        left: -7vw;
+        width: min(56vw, 780px);
+        height: 84vh;
+        --draw-scale: 1.18;
+        --draw-shift-x: -0.03;
+        --draw-shift-y: 0.04;
+      }
+
+      .works-stage {
+        height: 405px;
+      }
+
+      .laptop-link.left { --laptop-w: min(21.5vw, 322px); left: 1.4%; top: 18%; }
+      .laptop-link.center { --laptop-w: min(19vw, 295px); left: 40%; top: 0; }
+      .laptop-link.right { --laptop-w: min(18vw, 268px); right: 0.4%; top: 22%; }
+
+      .laptop-screen {
+        padding: 9px;
+      }
+
+      .work-copy {
+        gap: 2px;
+        margin-top: 4px;
+        font-size: 0.48rem;
+        line-height: 1.14;
+      }
+
+      .laptop-link.left .work-copy {
+        gap: 3px;
+        font-size: 0.56rem;
+        line-height: 1.2;
+      }
+
+      .laptop-link.right .work-copy {
+        font-size: 0.56rem;
+        line-height: 1.18;
+      }
+
+      .work-copy span {
+        padding: 2px 4px;
+      }
+
+      .works-figure {
+        width: min(36vw, 540px);
+        height: 46vh;
+        --draw-scale: 2.05;
+        --draw-shift-y: 1.05;
+      }
+
+      .why-heading {
+        margin-top: 46px;
+      }
+
+      .timeline {
+        width: min(69vw, 1110px);
+        margin-right: 1.7vw;
+        margin-top: 34px;
+        gap: 22px;
+      }
+
+      .timeline-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .timeline-wave {
+        top: 32px;
+        height: 78px;
+      }
+
+      .timeline-item {
+        gap: 12px;
+        font-size: 0.82rem;
+        line-height: 1.36;
+      }
+
+      .why-figure {
+        left: -5vw;
+        width: min(33vw, 500px);
+        height: 80vh;
+      }
+
+      .here-note {
+        top: 32vh;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero-title {
+        top: 3vh;
+        left: 50%;
+        line-height: 0.92;
+        font-size: clamp(4.5rem, 22vw, 7.5rem);
+        letter-spacing: 0.018em;
+        opacity: 0.42;
+      }
+
+      .copy {
+        top: 17vh;
+        width: 43vw;
+        font-size: 0.98rem;
+      }
+
+      .figure-stage {
+        width: 96vw;
+        height: 67vh;
+      }
+
+      .puzzle {
+        width: 58px;
+        bottom: 74px;
+      }
+
+      .nav-step {
+        gap: 9px;
+        font-size: 0.78rem;
+      }
+
+      .character-nav {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .character-heading h2 {
+        font-size: 2rem;
+      }
+
+      .character-heading p {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+
+      .hero-title {
+        opacity: 1;
+        transform: none;
+      }
+
+      .figure-stage,
+      .start-link {
+        opacity: 1;
+        transform: translateX(-50%);
+      }
+
+      .puzzle {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-label="WANGHAIXIN 首屏">
+      <h1 class="hero-title">WANGHAIXIN</h1>
+
+      <p class="copy">关于我，<br>答案散落在我走过的地方。</p>
+
+      <div class="figure-stage" id="figureStage" aria-label="3D 潮玩女孩动态形象">
+        <video id="sourceVideo" src="assets/animation/开屏打招呼-新版.mp4?v=1" autoplay muted loop playsinline preload="auto"></video>
+        <canvas id="figureCanvas"></canvas>
+        <img class="figure-poster" src="assets/IP/看手机-透明.png?v=5" alt="">
+      </div>
+
+      <div class="puzzle one" aria-hidden="true">
+        <svg viewBox="0 0 120 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 38C9 28.6 16.6 21 26 21H42C43.5 21 44.5 22.5 44 23.9C42.8 27.1 43.6 30.9 46.3 33.5C50.4 37.5 57.1 37.5 61.2 33.5C63.9 30.9 64.7 27.1 63.5 23.9C63 22.5 64 21 65.5 21H82C91.4 21 99 28.6 99 38V48.7C99 50.3 100.7 51.3 102.1 50.5C105.5 48.5 110 48.9 113 51.9C116.9 55.8 116.9 62.2 113 66.1C110 69.1 105.5 69.5 102.1 67.5C100.7 66.7 99 67.7 99 69.3V82C99 91.4 91.4 99 82 99H11C6.6 99 3 95.4 3 91V70.5C3 69 4.5 68 5.9 68.5C9 69.7 12.7 68.9 15.2 66.3C19.1 62.3 19.1 55.8 15.2 51.8C12.7 49.2 9 48.4 5.9 49.6C4.5 50.1 3 49.1 3 47.6V44C3 40.7 5.7 38 9 38Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="puzzle two" aria-hidden="true">
+        <svg viewBox="0 0 120 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 38C9 28.6 16.6 21 26 21H42C43.5 21 44.5 22.5 44 23.9C42.8 27.1 43.6 30.9 46.3 33.5C50.4 37.5 57.1 37.5 61.2 33.5C63.9 30.9 64.7 27.1 63.5 23.9C63 22.5 64 21 65.5 21H82C91.4 21 99 28.6 99 38V48.7C99 50.3 100.7 51.3 102.1 50.5C105.5 48.5 110 48.9 113 51.9C116.9 55.8 116.9 62.2 113 66.1C110 69.1 105.5 69.5 102.1 67.5C100.7 66.7 99 67.7 99 69.3V82C99 91.4 91.4 99 82 99H11C6.6 99 3 95.4 3 91V70.5C3 69 4.5 68 5.9 68.5C9 69.7 12.7 68.9 15.2 66.3C19.1 62.3 19.1 55.8 15.2 51.8C12.7 49.2 9 48.4 5.9 49.6C4.5 50.1 3 49.1 3 47.6V44C3 40.7 5.7 38 9 38Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="puzzle three" aria-hidden="true">
+        <svg viewBox="0 0 120 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 38C9 28.6 16.6 21 26 21H42C43.5 21 44.5 22.5 44 23.9C42.8 27.1 43.6 30.9 46.3 33.5C50.4 37.5 57.1 37.5 61.2 33.5C63.9 30.9 64.7 27.1 63.5 23.9C63 22.5 64 21 65.5 21H82C91.4 21 99 28.6 99 38V48.7C99 50.3 100.7 51.3 102.1 50.5C105.5 48.5 110 48.9 113 51.9C116.9 55.8 116.9 62.2 113 66.1C110 69.1 105.5 69.5 102.1 67.5C100.7 66.7 99 67.7 99 69.3V82C99 91.4 91.4 99 82 99H11C6.6 99 3 95.4 3 91V70.5C3 69 4.5 68 5.9 68.5C9 69.7 12.7 68.9 15.2 66.3C19.1 62.3 19.1 55.8 15.2 51.8C12.7 49.2 9 48.4 5.9 49.6C4.5 50.1 3 49.1 3 47.6V44C3 40.7 5.7 38 9 38Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="puzzle four" aria-hidden="true">
+        <svg viewBox="0 0 120 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 38C9 28.6 16.6 21 26 21H42C43.5 21 44.5 22.5 44 23.9C42.8 27.1 43.6 30.9 46.3 33.5C50.4 37.5 57.1 37.5 61.2 33.5C63.9 30.9 64.7 27.1 63.5 23.9C63 22.5 64 21 65.5 21H82C91.4 21 99 28.6 99 38V48.7C99 50.3 100.7 51.3 102.1 50.5C105.5 48.5 110 48.9 113 51.9C116.9 55.8 116.9 62.2 113 66.1C110 69.1 105.5 69.5 102.1 67.5C100.7 66.7 99 67.7 99 69.3V82C99 91.4 91.4 99 82 99H11C6.6 99 3 95.4 3 91V70.5C3 69 4.5 68 5.9 68.5C9 69.7 12.7 68.9 15.2 66.3C19.1 62.3 19.1 55.8 15.2 51.8C12.7 49.2 9 48.4 5.9 49.6C4.5 50.1 3 49.1 3 47.6V44C3 40.7 5.7 38 9 38Z" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <a class="start-link" href="#character" aria-label="进入 01 我是谁"><span>START</span></a>
+    </section>
+
+    <section class="next-panel" id="character" aria-label="01 我是谁 Character">
+      <nav class="character-nav" aria-label="个人网站章节">
+        <a class="nav-step is-active" href="#character" aria-current="page">
+          <span class="step-dot">1</span>
+          <span>我是谁</span>
+        </a>
+        <a class="nav-step" href="#skills">
+          <span class="step-dot">2</span>
+          <span>我擅长什么</span>
+        </a>
+        <a class="nav-step" href="#works">
+          <span class="step-dot">3</span>
+          <span>我做过什么</span>
+        </a>
+        <a class="nav-step" href="#why">
+          <span class="step-dot">4</span>
+          <span>我为什么<br>来到这里</span>
+        </a>
+      </nav>
+
+      <div class="character-figure" id="characterFigure" aria-label="滑雪动态形象">
+        <video id="characterVideo" src="assets/animation/滑雪视频.mp4?v=1" autoplay muted loop playsinline preload="auto"></video>
+        <canvas id="characterCanvas"></canvas>
+        <img class="character-poster" src="assets/IP/transparent/滑雪.png" alt="">
+      </div>
+
+      <header class="character-heading">
+        <h2>01 / 我是谁</h2>
+        <p>—CHARACTER—</p>
+      </header>
+
+      <div class="character-cards">
+        <article class="character-card">
+          <div class="card-head">
+            <svg class="card-icon" viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M6 32s10-15 26-15 26 15 26 15-10 15-26 15S6 32 6 32Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+              <circle class="accent" cx="32" cy="32" r="10" stroke-width="3"/>
+              <circle cx="32" cy="32" r="4" fill="currentColor"/>
+              <path d="M16 15 12 9M50 15l4-6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <h3 class="card-title">敏锐<small>I notice.</small></h3>
+          </div>
+          <p class="card-lead">我很容易注意到那些没有被说出来的变化，很难忽略那些不对劲的地方。</p>
+          <div class="card-rule"></div>
+          <p class="card-evidence">人的情绪感知<br>关系结构<br>用户信号<br>体验差异</p>
+        </article>
+
+        <article class="character-card">
+          <div class="card-head">
+            <svg class="card-icon" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="27" cy="27" r="17" fill="none" stroke="currentColor" stroke-width="3"/>
+              <path d="M39 39 55 55" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+              <path d="M18 16c6-5 16-4 21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3 class="card-title">刨根问底<small>I question.</small></h3>
+          </div>
+          <p class="card-lead">知道答案通常不够，我想知道这个答案为什么成立。</p>
+          <div class="card-rule"></div>
+          <p class="card-evidence">为什么<br>元认知<br>自省<br>分析 / 建模</p>
+        </article>
+
+        <article class="character-card">
+          <div class="card-head">
+            <svg class="card-icon" viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M16 55V12" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+              <path class="accent" d="M18 14c10-7 18 6 30-1v24c-12 7-20-6-30 1Z" stroke-width="3" stroke-linejoin="round"/>
+            </svg>
+            <h3 class="card-title">强主体性<small>I own it.</small></h3>
+          </div>
+          <p class="card-lead">目标一旦是我认可的，我不会等一条现成的路出现。</p>
+          <div class="card-rule"></div>
+          <p class="card-evidence">野心<br>灵活 / 韧性<br>投入<br>责任心</p>
+        </article>
+      </div>
+
+      <a class="section-cta" href="#skills" aria-label="进入下一章节">NEXT</a>
+    </section>
+
+    <section class="next-panel" id="skills" aria-label="02 我擅长什么 Capability">
+      <nav class="character-nav" aria-label="个人网站章节">
+        <a class="nav-step" href="#character"><span class="step-dot is-done-purple">1</span><span>我是谁</span></a>
+        <a class="nav-step theme-gray is-active" href="#skills" aria-current="page"><span class="step-dot">2</span><span>我擅长什么</span></a>
+        <a class="nav-step" href="#works"><span class="step-dot">3</span><span>我做过什么</span></a>
+        <a class="nav-step" href="#why"><span class="step-dot">4</span><span>我为什么<br>来到这里</span></a>
+      </nav>
+
+      <div class="cutout-figure skills-figure" data-video="assets/animation/压腿视频.mp4?v=1" data-poster="assets/IP/运动.png" aria-label="运动动态形象">
+        <video autoplay muted loop playsinline preload="auto"></video>
+        <canvas></canvas>
+        <img src="assets/IP/运动.png" alt="">
+      </div>
+
+      <header class="page-heading skills-heading">
+        <h2>02 / 我擅长什么</h2>
+        <p>—CAPABILITY—</p>
+      </header>
+
+      <div class="skills-grid">
+        <section class="skill-column">
+          <div class="skill-label">I THINK</div>
+          <div class="skill-panel">
+            <p class="skill-group-title">一、Thinking Capability</p>
+            <article class="skill-item" tabindex="0">
+              <svg class="skill-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="3"/>
+                <path d="M32 14V8M32 56v-6M14 32H8m48 0h-6M45 19l5-5M19 45l-5 5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="32" cy="32" r="6" fill="rgba(111,115,115,.2)" stroke="currentColor" stroke-width="3"/>
+              </svg>
+              <div>
+                <h3>01 抽象建模 / MODEL</h3>
+                <p>从具体经验中识别重复模式，抽象出结构；再把结构迁移到新的情境，并据此形成判断甚至预测。</p>
+                <p class="skill-tags">观察 → 模式 → 建模 → 迁移 → 预测</p>
+              </div>
+            </article>
+            <article class="skill-item" tabindex="0">
+              <svg class="skill-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M13 24a11 11 0 0 1 19 0 11 11 0 0 1 19 0M22 35v12m20-12v12M13 47h38" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="22" cy="24" r="5" fill="rgba(111,115,115,.18)" stroke="currentColor" stroke-width="3"/>
+                <circle cx="42" cy="24" r="5" fill="rgba(111,115,115,.18)" stroke="currentColor" stroke-width="3"/>
+              </svg>
+              <div>
+                <h3>02 系统思维 / CONNECT</h3>
+                <p>看见连接，并把分散的部分组织成一个整体。</p>
+                <p class="skill-tags">局部 → 连接 → 整合 → 系统 → 反馈</p>
+              </div>
+            </article>
+            <article class="skill-item" tabindex="0">
+              <svg class="skill-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M16 48c7-20 18-29 34-33-1 18-10 29-31 35" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 43c7-3 14-8 22-20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+              <div>
+                <h3>03 叙事 / TELL</h3>
+                <p>把复杂真实重新组织成一个可以被理解、感受和记住的体验。</p>
+                <p class="skill-tags">理解 → 选择 → 组织 → 表达 → 感受</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="skill-column">
+          <div class="skill-label">I BUILD</div>
+          <div class="skill-panel build-list">
+            <p class="skill-group-title">二、Product Craft</p>
+            <article class="build-row" tabindex="0">
+              <svg class="skill-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M18 10h24l8 8v36H18Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+                <path d="M42 10v10h10M26 30h17M26 39h17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+              <div>
+                <h3>01 产品定义 / DEFINE</h3>
+                <p class="build-definition">决定什么值得做。</p>
+                <p class="build-examples">用户研究、竞品研究、需求洞察、场景拆解、需求分析、问题定义、产品定位、价值主张、MVP、优先级与 Roadmap</p>
+              </div>
+            </article>
+            <article class="build-row" tabindex="0">
+              <svg class="skill-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M18 18h28v28H18zM28 18v28M18 30h28" fill="none" stroke="currentColor" stroke-width="3"/>
+                <path d="M46 14l4-4 4 4M46 50l4 4 4-4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <div>
+                <h3>02 产品设计 / Design</h3>
+                <p class="build-definition">把产品定义变成完整、可使用的体验。</p>
+                <p class="build-examples">用户流程、信息架构、功能设计、交互、流程图、原型图、PRD</p>
+              </div>
+            </article>
+            <article class="build-row" tabindex="0">
+              <svg class="skill-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <path d="M12 32h40M32 12v40M19 19l26 26M45 19 19 45" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="32" cy="32" r="8" fill="rgba(111,115,115,.18)" stroke="currentColor" stroke-width="3"/>
+              </svg>
+              <div>
+                <h3>03 Build with AI</h3>
+                <p class="build-definition">理解 AI 怎么成为产品，也用 AI 把产品真正做出来。</p>
+                <p class="build-examples">BUILD AI：prompt、skills、Memory、Agents、Orchestration<br>BUILD WITH AI：Codex / claude code / Gemini / 豆包</p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <a class="section-cta is-back" href="#character" aria-label="返回上一章节">BACK</a>
+      <a class="section-cta is-gray" href="#works" aria-label="进入下一章节">NEXT</a>
+    </section>
+
+    <section class="next-panel" id="works" aria-label="03 我做过什么 Evidence">
+      <nav class="character-nav" aria-label="个人网站章节">
+        <a class="nav-step" href="#character"><span class="step-dot is-done-purple">1</span><span>我是谁</span></a>
+        <a class="nav-step" href="#skills"><span class="step-dot is-done-gray">2</span><span>我擅长什么</span></a>
+        <a class="nav-step theme-pink is-active" href="#works" aria-current="page"><span class="step-dot">3</span><span>我做过什么</span></a>
+        <a class="nav-step" href="#why"><span class="step-dot">4</span><span>我为什么<br>来到这里</span></a>
+      </nav>
+
+      <header class="page-heading works-heading">
+        <h2>03 / 我做过什么</h2>
+        <p>—EVIDENCE—</p>
+      </header>
+
+      <div class="works-stage">
+        <div class="work-arc" aria-hidden="true"></div>
+        <a class="laptop-link left" href="#project-portfolio" data-modal-title="I WORKED｜实习" data-modal-body="1 month——产品实习 上海唯渡网络科技有限公司：从看懂产品怎么被一群人做出来，到成为那个能把事情往前推的人。1个月真实产品开发 → 从协助到独立负责 → 多需求并行推进。7 days——产品运营实习 上海梭捷网络科技有限公司：从把事情做完，到把做事的方法留下来。800+ 次/日审核 → 混乱变成规则 → 2份可复用文档：《提现审核速通指南》、《产运新人说明书》。">
+          <div class="laptop-screen">
+            <h3>I WORKED</h3>
+            <p>Internship</p>
+            <div class="work-copy">
+              <span><strong>1 month——产品实习 上海唯渡网络科技有限公司</strong></span>
+              <span>从看懂产品怎么被一群人做出来，到成为那个能把事情往前推的人。</span>
+              <span>1个月真实产品开发 → 从协助到独立负责 → 多需求并行推进</span>
+              <span><strong>7 days——产品运营实习 上海梭捷网络科技有限公司</strong></span>
+              <span>从把事情做完，到把做事的方法留下来。</span>
+              <span>800+ 次/日审核 → 混乱变成规则 → 2份可复用文档：《提现审核速通指南》、《产运新人说明书》。</span>
+            </div>
+          </div>
+          <div class="laptop-base"></div>
+        </a>
+
+        <a class="laptop-link center is-selected" href="#northstar" data-modal-title="I CREATED｜《北极星》" data-modal-body="从 0 到 1，我创造了一款属于自己的 AI 产品。这个入口之后可以接入 Northstar 网站链接或项目 PDF。">
+          <div class="laptop-screen">
+            <h3>I CREATED</h3>
+            <p>NORTHSTAR</p>
+            <p>0 → 1 Consumer AI Product</p>
+            <small>《北极星》</small>
+            <div class="work-copy">
+              <span>从 0 到 1</span>
+              <span>属于自己的 AI 产品</span>
+            </div>
+          </div>
+          <div class="laptop-base"></div>
+        </a>
+
+        <a class="laptop-link right" href="#ai-shopping" data-modal-title="I STARTED｜小红书AI选购" data-modal-body="第一次自己完成从想法 → 调研 → 流程 → 原型 → PRD。3–4 days · Learning by building · Gemini as copilot。这个入口之后可以接入项目网站或 PDF。">
+          <div class="laptop-screen">
+            <h3>I STARTED</h3>
+            <p>Product Draft</p>
+            <div class="work-copy">
+              <span>第一次自己完成从想法 → 调研 → 流程 → 原型 → PRD。</span>
+              <span><strong>3–4 days · Learning by building · Gemini as copilot</strong></span>
+            </div>
+          </div>
+          <div class="laptop-base"></div>
+        </a>
+
+        <div class="cutout-figure works-figure" data-video="assets/animation/粉色怪表情视频.mp4?v=2" data-poster="assets/IP/俏皮.png" data-cap="assets/IP/transparent/俏皮.png" aria-label="粉色动态形象">
+          <video autoplay muted loop playsinline preload="auto"></video>
+          <canvas></canvas>
+          <img src="assets/IP/俏皮.png" alt="">
+        </div>
+      </div>
+
+      <a class="section-cta is-back" href="#skills" aria-label="返回上一章节">BACK</a>
+      <a class="section-cta is-pink" href="#why" aria-label="进入下一章节">NEXT</a>
+    </section>
+
+    <section class="next-panel" id="why" aria-label="04 我为什么来到这里 Trajectory">
+      <nav class="character-nav" aria-label="个人网站章节">
+        <a class="nav-step" href="#character"><span class="step-dot is-done-purple">1</span><span>我是谁</span></a>
+        <a class="nav-step" href="#skills"><span class="step-dot is-done-gray">2</span><span>我擅长什么</span></a>
+        <a class="nav-step" href="#works"><span class="step-dot is-done-pink">3</span><span>我做过什么</span></a>
+        <a class="nav-step theme-blue is-active" href="#why" aria-current="page"><span class="step-dot">4</span><span>我为什么<br>来到这里</span></a>
+      </nav>
+
+      <div class="cutout-figure why-figure" data-video="assets/animation/办公视频.mp4?v=2" data-poster="assets/IP/办公.png" aria-label="办公动态形象">
+        <video autoplay muted loop playsinline preload="auto"></video>
+        <canvas></canvas>
+        <img src="assets/IP/办公.png" alt="">
+      </div>
+
+      <header class="page-heading why-heading">
+        <h2>04 / 我为什么来到这里</h2>
+        <p>—TRAJECTORY—</p>
+      </header>
+
+      <div class="timeline">
+        <svg class="timeline-wave" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 50 C70 -8 130 108 200 50 S330 -8 400 50 S530 108 600 50 S730 -8 800 50 S930 108 1000 50" fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <article class="timeline-item" role="button" tabindex="0">
+          <svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 16c10-5 18 0 18 0s8-5 18 0v34c-10-5-18 0-18 0s-8-5-18 0Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M32 16v34M20 24h7M20 32h7M38 24h7M38 32h7" stroke="currentColor" stroke-width="2"/></svg>
+          <span class="timeline-dot"></span>
+          <p><strong>① LOGISTICS</strong>一个现实的选择<em>专业不是答案。</em></p>
+        </article>
+        <article class="timeline-item" role="button" tabindex="0">
+          <svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 52V40a12 12 0 0 1 24 0v12M32 28a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 52V42a10 10 0 0 1 13-9M54 52V42a10 10 0 0 0-13-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <span class="timeline-dot"></span>
+          <p><strong>② EXPLORE</strong>我到底要做什么？<em>什么都试，也什么都没选定。</em></p>
+        </article>
+        <article class="timeline-item" role="button" tabindex="0">
+          <svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="m32 8 21 12v24L32 56 11 44V20Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M11 20 32 32l21-12M32 32v24" stroke="currentColor" stroke-width="3"/></svg>
+          <span class="timeline-dot"></span>
+          <p><strong>③ CHOOSE</strong>上海 · 产品<em>第一次主动砍掉其他答案。</em></p>
+        </article>
+        <article class="timeline-item" role="button" tabindex="0">
+          <svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 53S12 40 12 24a11 11 0 0 1 20-6 11 11 0 0 1 20 6c0 16-20 29-20 29Z" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+          <span class="timeline-dot is-pink"></span>
+          <p><strong>④ BUILD</strong>第一个产品作品<em>没有经历，就先自己做一个。</em></p>
+        </article>
+        <article class="timeline-item" role="button" tabindex="0">
+          <svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 8l5 16 16 5-16 6-5 16-6-16-16-6 16-5Z" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+          <span class="timeline-dot is-pink"></span>
+          <p><strong>⑤ TEST</strong>进入真实产品世界<em>确认了产品，也排除了不属于我的方向。</em></p>
+        </article>
+        <article class="timeline-item" role="button" tabindex="0">
+          <svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="m32 10 6 14 15 1-11 10 4 15-14-8-14 8 4-15-11-10 15-1Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+          <span class="timeline-dot"></span>
+          <p><strong>⑥ CREATE</strong>Northstar<em>开始做一个真正属于自己的产品。</em></p>
+        </article>
+        <article class="timeline-item" role="button" tabindex="0">
+          <svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 56s16-17 16-31a16 16 0 0 0-32 0c0 14 16 31 16 31Z" fill="rgba(45,145,231,.28)" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="25" r="6" fill="#fbf7f1" stroke="currentColor" stroke-width="3"/></svg>
+          <span class="timeline-dot is-blue"></span>
+          <p><strong>⑦ HERE</strong>这一次，我知道自己为什么选择它。<em>Consumer AI Product · Shanghai</em></p>
+        </article>
+      </div>
+      <div class="here-note">YOU ARE<br>HERE.</div>
+
+      <a class="section-cta is-back" href="#works" aria-label="返回上一章节">BACK</a>
+      <a class="section-cta is-blue" href="#final" aria-label="完成并进入最后一页">FINISH</a>
+    </section>
+
+    <section class="next-panel final-panel" id="final" aria-label="这就是我">
+      <nav class="character-nav" aria-label="个人网站章节">
+        <a class="nav-step" href="#character"><span class="step-dot is-done-purple">01</span><span>我是谁</span></a>
+        <a class="nav-step" href="#skills"><span class="step-dot is-done-gray">02</span><span>我擅长什么</span></a>
+        <a class="nav-step" href="#works"><span class="step-dot is-done-pink">03</span><span>我做过什么</span></a>
+        <a class="nav-step" href="#why"><span class="step-dot is-done-blue">04</span><span>我为什么<br>来到这里</span></a>
+      </nav>
+
+      <div class="puzzle-wall" aria-hidden="true">
+        <div class="soft-piece one"><span><small>01</small>我是谁</span></div>
+        <div class="soft-piece two"><span><small>02</small>我擅长什么</span></div>
+        <div class="soft-piece three"><span><small>03</small>我做过什么</span></div>
+        <div class="soft-piece four"><span><small>04</small>我为什么<br>来到这里</span></div>
+        <div class="cutout-figure final-figure" data-video="assets/animation/不羁视频.mp4?v=2" data-poster="assets/IP/不羁.png" aria-label="最终动态形象">
+          <video autoplay muted loop playsinline preload="auto"></video>
+          <canvas></canvas>
+          <img src="assets/IP/不羁.png" alt="">
+        </div>
+      </div>
+
+      <div class="final-copy">
+        <h2>这就是我。</h2>
+        <p class="english">THIS IS XIAOXIN.</p>
+        <p>谢谢你花时间认识我！</p>
+        <p>期待有机会一起创造有价值的产品。</p>
+        <div class="final-actions">
+          <button class="final-button" type="button" data-modal-title="查看简历" data-modal-body="这里保留简历入口。当前项目文件夹里暂未发现简历 PDF；给我 PDF 文件后，我会把这个按钮改成直接打开简历。"><strong>查看简历</strong>Resume</button>
+          <button class="final-button is-filled" type="button" data-modal-title="联系我吧" data-modal-body="这里保留联系方式入口。可以放微信、邮箱、电话或作品集链接；你给我具体联系方式后，我会直接写进弹窗。"><strong>联系我吧</strong>Let's Talk</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-box">
+        <h3 id="modalTitle"></h3>
+        <p id="modalBody"></p>
+        <button class="modal-close" type="button">关闭</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    window.addEventListener("load", () => {
+      if (!location.hash) {
+        requestAnimationFrame(() => window.scrollTo(0, 0));
+        setTimeout(() => window.scrollTo(0, 0), 80);
+      }
+    });
+
+    const stage = document.getElementById("figureStage");
+    const video = document.getElementById("sourceVideo");
+    const canvas = document.getElementById("figureCanvas");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+    let bg = [200, 203, 224];
+    let fitted = { x: 0, y: 0, w: 0, h: 0 };
+    let hasStarted = false;
+
+    function distance(a, b, c, color) {
+      const dr = a - color[0];
+      const dg = b - color[1];
+      const db = c - color[2];
+      return Math.sqrt(dr * dr + dg * dg + db * db);
+    }
+
+    function sampleBackground() {
+      const w = canvas.width;
+      const h = canvas.height;
+      if (!w || !h) return;
+
+      ctx.drawImage(video, fitted.x, fitted.y, fitted.w, fitted.h);
+      const points = [
+        [Math.floor(fitted.x + fitted.w * 0.05), Math.floor(fitted.y + fitted.h * 0.05)],
+        [Math.floor(fitted.x + fitted.w * 0.95), Math.floor(fitted.y + fitted.h * 0.05)],
+        [Math.floor(fitted.x + fitted.w * 0.05), Math.floor(fitted.y + fitted.h * 0.95)],
+        [Math.floor(fitted.x + fitted.w * 0.95), Math.floor(fitted.y + fitted.h * 0.95)]
+      ];
+      const data = points.map(([x, y]) => ctx.getImageData(x, y, 1, 1).data);
+      bg = data.reduce((acc, pixel) => {
+        acc[0] += pixel[0];
+        acc[1] += pixel[1];
+        acc[2] += pixel[2];
+        return acc;
+      }, [0, 0, 0]).map(v => v / data.length);
+    }
+
+    function fitCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const box = stage.getBoundingClientRect();
+      const nextWidth = Math.max(1, Math.round(box.width * dpr));
+      const nextHeight = Math.max(1, Math.round(box.height * dpr));
+      if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
+        canvas.width = nextWidth;
+        canvas.height = nextHeight;
+      }
+
+      const videoRatio = video.videoWidth / video.videoHeight || 1;
+      const boxRatio = canvas.width / canvas.height;
+      if (boxRatio > videoRatio) {
+        fitted.h = canvas.height;
+        fitted.w = fitted.h * videoRatio;
+      } else {
+        fitted.w = canvas.width;
+        fitted.h = fitted.w / videoRatio;
+      }
+      fitted.x = (canvas.width - fitted.w) / 2;
+      fitted.y = canvas.height - fitted.h;
+    }
+
+    function isProtectedShoePixel(x, y, r, g, b) {
+      const nx = (x - fitted.x) / fitted.w;
+      const ny = (y - fitted.y) / fitted.h;
+      const inShoeY = ny > 0.91 && ny < 0.985;
+      const inLeftShoe = nx > 0.28 && nx < 0.5;
+      const inRightShoe = nx > 0.48 && nx < 0.72;
+      const warmLight = r > 132 && g > 112 && b > 88 && r > g + 4 && g > b + 2;
+      return inShoeY && (inLeftShoe || inRightShoe) && warmLight;
+    }
+
+    function isBackdropPixel(pixels, index, background, x, y) {
+      const r = pixels[index];
+      const g = pixels[index + 1];
+      const b = pixels[index + 2];
+      if (isProtectedShoePixel(x, y, r, g, b)) return false;
+      const max = Math.max(r, g, b);
+      const min = Math.min(r, g, b);
+      const saturation = max - min;
+      const bgDistance = distance(r, g, b, background);
+      return (r > 226 && g > 226 && b > 226 && saturation < 38) ||
+        (bgDistance < 38 && max > 206 && saturation < 42);
+    }
+
+    function removeConnectedBackdrop(frame) {
+      const width = canvas.width;
+      const height = canvas.height;
+      const pixels = frame.data;
+      const seen = new Uint8Array(width * height);
+      const queue = [];
+      let head = 0;
+
+      function push(x, y) {
+        if (x < 0 || y < 0 || x >= width || y >= height) return;
+        const pixel = y * width + x;
+        if (seen[pixel]) return;
+        const index = pixel * 4;
+        if (!isBackdropPixel(pixels, index, bg, x, y)) return;
+        seen[pixel] = 1;
+        queue.push(pixel);
+      }
+
+      for (let x = 0; x < width; x += 1) {
+        push(x, 0);
+        push(x, height - 1);
+      }
+      for (let y = 0; y < height; y += 1) {
+        push(0, y);
+        push(width - 1, y);
+      }
+
+      while (head < queue.length) {
+        const pixel = queue[head];
+        head += 1;
+        const x = pixel % width;
+        const y = Math.floor(pixel / width);
+        push(x + 1, y);
+        push(x - 1, y);
+        push(x, y + 1);
+        push(x, y - 1);
+      }
+
+      for (let pixel = 0; pixel < seen.length; pixel += 1) {
+        if (!seen[pixel]) continue;
+        const index = pixel * 4;
+        pixels[index + 3] = 0;
+      }
+
+      return frame;
+    }
+
+    function repairShoeHighlights(frame) {
+      const width = canvas.width;
+      const height = canvas.height;
+      const pixels = frame.data;
+
+      for (let y = Math.floor(fitted.y + fitted.h * 0.91); y < Math.floor(fitted.y + fitted.h * 0.985); y += 1) {
+        for (let x = 0; x < width; x += 1) {
+          const nx = (x - fitted.x) / fitted.w;
+          if (!((nx > 0.3 && nx < 0.49) || (nx > 0.5 && nx < 0.7))) continue;
+          const index = (y * width + x) * 4;
+          if (pixels[index + 3] < 12) continue;
+
+          const r = pixels[index];
+          const g = pixels[index + 1];
+          const b = pixels[index + 2];
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const isBrightShoe = max > 176 && max - min < 72;
+          if (!isBrightShoe) continue;
+
+          pixels[index] = Math.round(r * 0.78 + 126 * 0.22);
+          pixels[index + 1] = Math.round(g * 0.78 + 110 * 0.22);
+          pixels[index + 2] = Math.round(b * 0.78 + 96 * 0.22);
+        }
+      }
+
+      return frame;
+    }
+
+    function renderFrame() {
+      if (video.readyState >= 2 && video.videoWidth) {
+        fitCanvas();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, fitted.x, fitted.y, fitted.w, fitted.h);
+
+        const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        ctx.putImageData(repairShoeHighlights(removeConnectedBackdrop(frame)), 0, 0);
+      }
+      requestAnimationFrame(renderFrame);
+    }
+
+    function bootVideo() {
+      if (hasStarted) return;
+      hasStarted = true;
+      video.play().catch(() => {});
+      fitCanvas();
+      setTimeout(sampleBackground, 160);
+      renderFrame();
+    }
+
+    video.addEventListener("loadeddata", bootVideo, { once: true });
+    video.addEventListener("canplay", bootVideo, { once: true });
+    video.addEventListener("error", () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stage.classList.add("video-failed");
+    });
+    window.addEventListener("resize", fitCanvas);
+
+    if (video.readyState >= 2) {
+      bootVideo();
+    } else {
+      video.load();
+      setTimeout(() => {
+        if (!hasStarted && video.readyState >= 2) bootVideo();
+        if (!hasStarted && video.readyState < 2) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          stage.classList.add("video-failed");
+        }
+      }, 3500);
+    }
+
+    const characterStage = document.getElementById("characterFigure");
+    const characterVideo = document.getElementById("characterVideo");
+    const characterCanvas = document.getElementById("characterCanvas");
+    const characterCtx = characterCanvas.getContext("2d", { willReadFrequently: true });
+    let characterFit = { x: 0, y: 0, w: 0, h: 0 };
+    let characterStarted = false;
+
+    function fitCharacterCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const box = characterStage.getBoundingClientRect();
+      const nextWidth = Math.max(1, Math.round(box.width * dpr));
+      const nextHeight = Math.max(1, Math.round(box.height * dpr));
+      if (characterCanvas.width !== nextWidth || characterCanvas.height !== nextHeight) {
+        characterCanvas.width = nextWidth;
+        characterCanvas.height = nextHeight;
+      }
+
+      const videoRatio = characterVideo.videoWidth / characterVideo.videoHeight || 1;
+      const boxRatio = characterCanvas.width / characterCanvas.height;
+      if (boxRatio > videoRatio) {
+        characterFit.h = characterCanvas.height;
+        characterFit.w = characterFit.h * videoRatio;
+      } else {
+        characterFit.w = characterCanvas.width;
+        characterFit.h = characterFit.w / videoRatio;
+      }
+      characterFit.x = 0;
+      characterFit.y = characterCanvas.height - characterFit.h;
+    }
+
+    function removeCharacterBackdrop(frame) {
+      const width = characterCanvas.width;
+      const height = characterCanvas.height;
+      const pixels = frame.data;
+      const seen = new Uint8Array(width * height);
+      const queue = [];
+      let head = 0;
+
+      function isCharacterBackdrop(index) {
+        const r = pixels[index];
+        const g = pixels[index + 1];
+        const b = pixels[index + 2];
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        return r > 226 && g > 220 && b > 214 && max - min < 34;
+      }
+
+      function push(x, y) {
+        if (x < 0 || y < 0 || x >= width || y >= height) return;
+        const pixel = y * width + x;
+        if (seen[pixel]) return;
+        const index = pixel * 4;
+        if (!isCharacterBackdrop(index)) return;
+        seen[pixel] = 1;
+        queue.push(pixel);
+      }
+
+      for (let x = 0; x < width; x += 1) {
+        push(x, 0);
+        push(x, height - 1);
+      }
+      for (let y = 0; y < height; y += 1) {
+        push(0, y);
+        push(width - 1, y);
+      }
+
+      while (head < queue.length) {
+        const pixel = queue[head];
+        head += 1;
+        const x = pixel % width;
+        const y = Math.floor(pixel / width);
+        push(x + 1, y);
+        push(x - 1, y);
+        push(x, y + 1);
+        push(x, y - 1);
+      }
+
+      for (let pixel = 0; pixel < seen.length; pixel += 1) {
+        if (!seen[pixel]) continue;
+        pixels[pixel * 4 + 3] = 0;
+      }
+
+      return frame;
+    }
+
+    function renderCharacterFrame() {
+      if (characterVideo.readyState >= 2 && characterVideo.videoWidth) {
+        fitCharacterCanvas();
+        characterCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+        characterCtx.drawImage(characterVideo, characterFit.x, characterFit.y, characterFit.w, characterFit.h);
+        if (characterStage.dataset.keyed !== "false") {
+          const frame = characterCtx.getImageData(0, 0, characterCanvas.width, characterCanvas.height);
+          characterCtx.putImageData(removeCharacterBackdrop(frame), 0, 0);
+        }
+      }
+      requestAnimationFrame(renderCharacterFrame);
+    }
+
+    function bootCharacterVideo() {
+      if (characterStarted) return;
+      characterStarted = true;
+      characterStage.classList.add("has-video");
+      characterVideo.play().catch(() => {});
+      fitCharacterCanvas();
+      renderCharacterFrame();
+    }
+
+    characterVideo.addEventListener("loadeddata", bootCharacterVideo, { once: true });
+    characterVideo.addEventListener("canplay", bootCharacterVideo, { once: true });
+    characterVideo.addEventListener("error", () => {
+      characterCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+      characterStage.classList.remove("has-video");
+      characterStage.classList.add("video-failed");
+    });
+    window.addEventListener("resize", fitCharacterCanvas);
+
+    if (characterVideo.readyState >= 2) {
+      bootCharacterVideo();
+    } else {
+      characterVideo.load();
+      setTimeout(() => {
+        if (!characterStarted && characterVideo.readyState >= 2) bootCharacterVideo();
+        if (!characterStarted && characterVideo.readyState < 2) {
+          characterCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+          characterStage.classList.add("video-failed");
+        }
+      }, 3500);
+    }
+
+    function initCutoutFigure(wrapper) {
+      const localVideo = wrapper.querySelector("video");
+      const localCanvas = wrapper.querySelector("canvas");
+      const localImage = wrapper.querySelector("img");
+      const localCtx = localCanvas.getContext("2d", { willReadFrequently: true });
+      const fit = { x: 0, y: 0, w: 0, h: 0 };
+      const isWorksFigure = wrapper.classList.contains("works-figure");
+      const worksCapImage = isWorksFigure && wrapper.dataset.cap ? new Image() : null;
+      const worksCapCanvas = worksCapImage ? document.createElement("canvas") : null;
+      const worksOriginalCanvas = worksCapImage ? document.createElement("canvas") : null;
+      const worksMaskedCapCanvas = worksCapImage ? document.createElement("canvas") : null;
+      const worksOriginalCtx = worksOriginalCanvas ? worksOriginalCanvas.getContext("2d") : null;
+      const worksMaskedCapCtx = worksMaskedCapCanvas ? worksMaskedCapCanvas.getContext("2d") : null;
+      let worksCapReady = false;
+      let worksFrameShiftY = 0;
+      let worksCapReference = null;
+      let worksCapShiftX = 0;
+      let worksCapShiftY = 0;
+      let started = false;
+      let sampledBg = [251, 247, 241];
+
+      localVideo.src = wrapper.dataset.video;
+      localImage.src = wrapper.dataset.poster;
+      if (worksCapImage) {
+        worksCapImage.addEventListener("load", () => {
+          worksCapCanvas.width = worksCapImage.naturalWidth;
+          worksCapCanvas.height = worksCapImage.naturalHeight;
+          const capCtx = worksCapCanvas.getContext("2d", { willReadFrequently: true });
+          capCtx.drawImage(worksCapImage, 0, 0);
+          const capFrame = capCtx.getImageData(0, 0, worksCapCanvas.width, worksCapCanvas.height);
+          const capPixels = capFrame.data;
+          for (let y = 0; y < worksCapCanvas.height; y += 1) {
+            const ny = y / worksCapCanvas.height;
+            for (let x = 0; x < worksCapCanvas.width; x += 1) {
+              const index = (y * worksCapCanvas.width + x) * 4;
+              const r = capPixels[index];
+              const g = capPixels[index + 1];
+              const b = capPixels[index + 2];
+              const isCapColor = r > 142 && b > 98 && (g > 118 || r - g > 26);
+              if (ny > 0.145 || !isCapColor) capPixels[index + 3] = 0;
+              if (ny > 0.125 && capPixels[index + 3]) {
+                capPixels[index + 3] *= (0.145 - ny) / 0.02;
+              }
+            }
+          }
+          capCtx.clearRect(0, 0, worksCapCanvas.width, worksCapCanvas.height);
+          capCtx.putImageData(capFrame, 0, 0);
+          worksCapReady = true;
+        }, { once: true });
+        worksCapImage.src = wrapper.dataset.cap;
+      }
+
+      wrapper.__setFigureSource = (videoSrc, posterSrc) => {
+        if (posterSrc) {
+          wrapper.dataset.poster = posterSrc;
+          localImage.src = posterSrc;
+        }
+        if (wrapper.dataset.staticOnly === "true") return;
+        if (!videoSrc || videoSrc === wrapper.dataset.video) return;
+        wrapper.dataset.video = videoSrc;
+        wrapper.classList.remove("has-video", "video-failed");
+        localCtx.clearRect(0, 0, localCanvas.width, localCanvas.height);
+        localVideo.pause();
+        localVideo.src = videoSrc;
+        localVideo.load();
+        localVideo.play().catch(() => {
+          wrapper.classList.add("video-failed");
+        });
+      };
+
+      function fitLocalCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const box = wrapper.getBoundingClientRect();
+        const nextWidth = Math.max(1, Math.round(box.width * dpr));
+        const nextHeight = Math.max(1, Math.round(box.height * dpr));
+        if (localCanvas.width !== nextWidth || localCanvas.height !== nextHeight) {
+          localCanvas.width = nextWidth;
+          localCanvas.height = nextHeight;
+          if (worksOriginalCanvas) {
+            worksOriginalCanvas.width = nextWidth;
+            worksOriginalCanvas.height = nextHeight;
+            worksMaskedCapCanvas.width = nextWidth;
+            worksMaskedCapCanvas.height = nextHeight;
+          }
+        }
+
+        const videoRatio = localVideo.videoWidth / localVideo.videoHeight || 1;
+        const boxRatio = localCanvas.width / localCanvas.height;
+        if (boxRatio > videoRatio) {
+          fit.h = localCanvas.height;
+          fit.w = fit.h * videoRatio;
+        } else {
+          fit.w = localCanvas.width;
+          fit.h = fit.w / videoRatio;
+        }
+        const style = getComputedStyle(wrapper);
+        const drawScale = Number.parseFloat(style.getPropertyValue("--draw-scale")) || 1;
+        const shiftX = Number.parseFloat(style.getPropertyValue("--draw-shift-x")) || 0;
+        const shiftY = Number.parseFloat(style.getPropertyValue("--draw-shift-y")) || 0;
+        fit.w *= drawScale;
+        fit.h *= drawScale;
+        fit.x = (localCanvas.width - fit.w) / 2 + localCanvas.width * shiftX;
+        fit.y = localCanvas.height - fit.h + localCanvas.height * shiftY;
+      }
+
+      function removeWarmBackdrop(frame) {
+        const width = localCanvas.width;
+        const height = localCanvas.height;
+        const pixels = frame.data;
+        const seen = new Uint8Array(width * height);
+        const queue = [];
+        let head = 0;
+
+        function isBackdrop(index) {
+          const r = pixels[index];
+          const g = pixels[index + 1];
+          const b = pixels[index + 2];
+          const pixel = index / 4;
+          const x = pixel % width;
+          const y = Math.floor(pixel / width);
+          const nx = (x - fit.x) / fit.w;
+          const ny = (y - fit.y) / fit.h;
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const isWarmBackdrop = r > 240 && g > 235 && b > 228 && max - min < 34;
+          const bgDistance = distance(r, g, b, sampledBg);
+          if (isWorksFigure) {
+            return isWarmBackdrop ||
+              (bgDistance < 92 && max > 158 && max - min < 22) ||
+              (r > 228 && g > 224 && b > 218 && max - min < 36);
+          }
+          const inLightBody =
+            (nx > 0.26 && nx < 0.74 && ny > 0.22 && ny < 0.58) ||
+            (nx > 0.29 && nx < 0.51 && ny > 0.5 && ny < 0.99) ||
+            (nx > 0.49 && nx < 0.72 && ny > 0.5 && ny < 0.99);
+          const isFlatVideoBg = max - min < 9 && bgDistance < 38;
+          const inLightLegs =
+            (nx > 0.29 && nx < 0.51 && ny > 0.5 && ny < 0.99) ||
+            (nx > 0.49 && nx < 0.72 && ny > 0.5 && ny < 0.99);
+          const protectLightClothes = (wrapper.classList.contains("why-figure") || wrapper.classList.contains("final-figure")) &&
+            inLightBody &&
+            max > 82 &&
+            (!isFlatVideoBg || inLightLegs) &&
+            (!isWarmBackdrop || bgDistance > 12 || max - min > 12);
+          if (protectLightClothes) return false;
+          return isWarmBackdrop ||
+            (bgDistance < 48 && max > 184 && max - min < 74);
+        }
+
+        function push(x, y) {
+          if (x < 0 || y < 0 || x >= width || y >= height) return;
+          const pixel = y * width + x;
+          if (seen[pixel]) return;
+          if (!isBackdrop(pixel * 4)) return;
+          seen[pixel] = 1;
+          queue.push(pixel);
+        }
+
+        for (let x = 0; x < width; x += 1) {
+          push(x, 0);
+          push(x, height - 1);
+        }
+        for (let y = 0; y < height; y += 1) {
+          push(0, y);
+          push(width - 1, y);
+        }
+
+        const left = Math.max(0, Math.floor(fit.x));
+        const right = Math.min(width - 1, Math.ceil(fit.x + fit.w));
+        const top = Math.max(0, Math.floor(fit.y));
+        const bottom = Math.min(height - 1, Math.ceil(fit.y + fit.h));
+        for (let x = left; x <= right; x += 1) {
+          push(x, top);
+          push(x, bottom);
+        }
+        for (let y = top; y <= bottom; y += 1) {
+          push(left, y);
+          push(right, y);
+        }
+
+        while (head < queue.length) {
+          const pixel = queue[head];
+          head += 1;
+          const x = pixel % width;
+          const y = Math.floor(pixel / width);
+          push(x + 1, y);
+          push(x - 1, y);
+          push(x, y + 1);
+          push(x, y - 1);
+        }
+
+        for (let pixel = 0; pixel < seen.length; pixel += 1) {
+          if (seen[pixel]) pixels[pixel * 4 + 3] = 0;
+        }
+        return frame;
+      }
+
+      function anchorWorksSubject(frame) {
+        worksFrameShiftY = 0;
+        if (!isWorksFigure) return frame;
+        const width = localCanvas.width;
+        const height = localCanvas.height;
+        const pixels = frame.data;
+        let minX = width;
+        let minY = height;
+        let maxX = 0;
+        let maxY = 0;
+        let count = 0;
+
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const index = (y * width + x) * 4;
+            if (pixels[index + 3] < 24) continue;
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+            count += 1;
+          }
+        }
+
+        if (count < 120 || minY >= height) return frame;
+        const targetTop = Math.round(height * (Number.parseFloat(getComputedStyle(wrapper).getPropertyValue("--subject-top")) || 0.03));
+        const shiftY = targetTop - minY;
+        if (Math.abs(shiftY) < 1) return frame;
+        worksFrameShiftY = shiftY;
+
+        const shifted = new ImageData(width, height);
+        const shiftedPixels = shifted.data;
+        for (let y = Math.max(0, minY); y <= Math.min(height - 1, maxY); y += 1) {
+          const nextY = y + shiftY;
+          if (nextY < 0 || nextY >= height) continue;
+          const sourceStart = (y * width + Math.max(0, minX)) * 4;
+          const targetStart = (nextY * width + Math.max(0, minX)) * 4;
+          const rowLength = (Math.min(width - 1, maxX) - Math.max(0, minX) + 1) * 4;
+          shiftedPixels.set(pixels.subarray(sourceStart, sourceStart + rowLength), targetStart);
+        }
+        return shifted;
+      }
+
+      function removeWorksCapHalo(frame) {
+        if (!isWorksFigure) return frame;
+        const width = localCanvas.width;
+        const height = localCanvas.height;
+        const pixels = frame.data;
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const nx = (x - fit.x) / fit.w;
+            const ny = (y - fit.y) / fit.h;
+            if (nx < 0.2 || nx > 0.8 || ny < 0 || ny > 0.19) continue;
+            if (ny > 0.145 && nx > 0.31 && nx < 0.69) continue;
+            const index = (y * width + x) * 4;
+            const r = pixels[index];
+            const g = pixels[index + 1];
+            const b = pixels[index + 2];
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            if (r > 178 && g > 176 && b > 172 && max - min < 56) {
+              pixels[index + 3] = 0;
+            }
+          }
+        }
+        return frame;
+      }
+
+      function trackWorksCap(frame) {
+        if (!isWorksFigure) return;
+        const pixels = frame.data;
+        const width = localCanvas.width;
+        const height = localCanvas.height;
+        let sumX = 0;
+        let sumY = 0;
+        let count = 0;
+        const left = Math.max(0, Math.floor(fit.x + fit.w * 0.25));
+        const right = Math.min(width, Math.ceil(fit.x + fit.w * 0.75));
+        const top = Math.max(0, Math.floor(fit.y + fit.h * 0.09));
+        const bottom = Math.min(height, Math.ceil(fit.y + fit.h * 0.31));
+        for (let y = top; y < bottom; y += 2) {
+          for (let x = left; x < right; x += 2) {
+            const index = (y * width + x) * 4;
+            const r = pixels[index];
+            const g = pixels[index + 1];
+            const b = pixels[index + 2];
+            if (r < 105 && g < 96 && b < 94) {
+              sumX += x;
+              sumY += y;
+              count += 1;
+            }
+          }
+        }
+        if (count < 40) return;
+        const center = { x: sumX / count, y: sumY / count };
+        if (!worksCapReference) worksCapReference = center;
+        const targetX = center.x - worksCapReference.x;
+        const targetY = center.y - worksCapReference.y;
+        worksCapShiftX += (Math.max(-fit.w * 0.055, Math.min(fit.w * 0.055, targetX)) - worksCapShiftX) * 0.24;
+        worksCapShiftY += (Math.max(-fit.h * 0.035, Math.min(fit.h * 0.035, targetY)) - worksCapShiftY) * 0.24;
+      }
+
+      function restoreWorksCap() {
+        if (!worksCapReady) return;
+        worksMaskedCapCtx.clearRect(0, 0, worksMaskedCapCanvas.width, worksMaskedCapCanvas.height);
+        worksMaskedCapCtx.drawImage(
+          worksCapCanvas,
+          fit.x + worksCapShiftX,
+          fit.y + worksFrameShiftY + worksCapShiftY,
+          fit.w,
+          fit.h
+        );
+        const left = Math.max(0, Math.floor(fit.x + worksCapShiftX + fit.w * 0.22));
+        const top = Math.max(0, Math.floor(fit.y + worksFrameShiftY + worksCapShiftY));
+        const right = Math.min(localCanvas.width, Math.ceil(fit.x + worksCapShiftX + fit.w * 0.78));
+        const bottom = Math.min(localCanvas.height, Math.ceil(fit.y + worksFrameShiftY + worksCapShiftY + fit.h * 0.16));
+        const width = right - left;
+        const height = bottom - top;
+        if (width <= 0 || height <= 0) return;
+        const mask = worksMaskedCapCtx.getImageData(left, top, width, height).data;
+        const original = worksOriginalCtx.getImageData(left, top - worksFrameShiftY, width, height).data;
+        const result = localCtx.getImageData(left, top, width, height);
+        const pixels = result.data;
+        for (let index = 0; index < pixels.length; index += 4) {
+          const alpha = mask[index + 3] / 255;
+          if (alpha <= 0) continue;
+          pixels[index] = original[index];
+          pixels[index + 1] = original[index + 1];
+          pixels[index + 2] = original[index + 2];
+          pixels[index + 3] = Math.max(pixels[index + 3], original[index + 3] * alpha);
+        }
+        localCtx.putImageData(result, left, top);
+      }
+
+      function renderLocalFrame() {
+        if (localVideo.readyState >= 2 && localVideo.videoWidth) {
+          fitLocalCanvas();
+          localCtx.clearRect(0, 0, localCanvas.width, localCanvas.height);
+          localCtx.drawImage(localVideo, fit.x, fit.y, fit.w, fit.h);
+          if (isWorksFigure) {
+            worksOriginalCtx.clearRect(0, 0, worksOriginalCanvas.width, worksOriginalCanvas.height);
+            worksOriginalCtx.drawImage(localCanvas, 0, 0);
+          }
+          const samplePoints = [
+            [Math.max(0, Math.floor(fit.x + fit.w * 0.03)), Math.max(0, Math.floor(fit.y + fit.h * 0.03))],
+            [Math.min(localCanvas.width - 1, Math.floor(fit.x + fit.w * 0.97)), Math.max(0, Math.floor(fit.y + fit.h * 0.03))],
+            [Math.max(0, Math.floor(fit.x + fit.w * 0.03)), Math.min(localCanvas.height - 1, Math.floor(fit.y + fit.h * 0.97))],
+            [Math.min(localCanvas.width - 1, Math.floor(fit.x + fit.w * 0.97)), Math.min(localCanvas.height - 1, Math.floor(fit.y + fit.h * 0.97))]
+          ];
+          sampledBg = samplePoints.reduce((acc, point) => {
+            const pixel = localCtx.getImageData(point[0], point[1], 1, 1).data;
+            acc[0] += pixel[0];
+            acc[1] += pixel[1];
+            acc[2] += pixel[2];
+            return acc;
+          }, [0, 0, 0]).map(value => value / samplePoints.length);
+          if (wrapper.dataset.keyed !== "false") {
+            const frame = localCtx.getImageData(0, 0, localCanvas.width, localCanvas.height);
+            if (isWorksFigure) trackWorksCap(frame);
+            localCtx.putImageData(anchorWorksSubject(removeWorksCapHalo(removeWarmBackdrop(frame))), 0, 0);
+            if (isWorksFigure) restoreWorksCap();
+          }
+          wrapper.classList.add("has-video");
+        }
+        requestAnimationFrame(renderLocalFrame);
+      }
+
+      function bootLocalVideo() {
+        if (started) return;
+        started = true;
+        localVideo.play().catch(() => {});
+        fitLocalCanvas();
+        renderLocalFrame();
+      }
+
+      localVideo.addEventListener("loadeddata", bootLocalVideo, { once: true });
+      localVideo.addEventListener("canplay", bootLocalVideo, { once: true });
+      localVideo.addEventListener("error", () => {
+        localCtx.clearRect(0, 0, localCanvas.width, localCanvas.height);
+        wrapper.classList.add("video-failed");
+      });
+      window.addEventListener("resize", fitLocalCanvas);
+      localVideo.load();
+      setTimeout(() => {
+        if (!started && localVideo.readyState >= 2) bootLocalVideo();
+        if (!started && localVideo.readyState < 2) wrapper.classList.add("video-failed");
+      }, 3500);
+    }
+
+    document.querySelectorAll(".cutout-figure[data-video]").forEach(initCutoutFigure);
+
+    document.querySelectorAll(".skill-panel").forEach((panel) => {
+      const rows = Array.from(panel.querySelectorAll(".skill-item, .build-row"));
+      rows.forEach((row) => {
+        const toggleRow = () => {
+          const wasExpanded = row.classList.contains("is-expanded");
+          rows.forEach((item) => item.classList.remove("is-expanded"));
+          if (!wasExpanded) row.classList.add("is-expanded");
+        };
+        row.addEventListener("click", toggleRow);
+        row.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          toggleRow();
+        });
+      });
+    });
+
+    const timeline = document.querySelector(".timeline");
+    if (timeline) {
+      const timelineItems = Array.from(timeline.querySelectorAll(".timeline-item"));
+      const setTimelineProgress = (index) => {
+        timelineItems.forEach((item, itemIndex) => {
+          item.classList.toggle("is-reached", itemIndex <= index);
+        });
+        timeline.classList.toggle("is-complete", index === timelineItems.length - 1);
+      };
+      timelineItems.forEach((item, index) => {
+        item.addEventListener("click", () => setTimelineProgress(index));
+        item.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          setTimelineProgress(index);
+        });
+      });
+      setTimelineProgress(-1);
+    }
+
+    const modal = document.getElementById("infoModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const modalClose = modal.querySelector(".modal-close");
+
+    document.querySelectorAll("[data-modal-title]").forEach((trigger) => {
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        modalTitle.textContent = trigger.dataset.modalTitle;
+        modalBody.textContent = trigger.dataset.modalBody;
+        modal.classList.add("is-open");
+        modalClose.focus();
+      });
+    });
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeModal();
+    });
+  </script>
+</body>
+</html>
