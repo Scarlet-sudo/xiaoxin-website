@@ -9,7 +9,7 @@ const assets = [
   { html: 'assets/animation/不羁视频.mp4', source: 'assets/animation/不羁视频.mp4', target: '/assets/animation/free-spirit.mp4' },
   { html: 'assets/animation/粉色怪表情视频.mp4', source: 'assets/animation/粉色怪表情视频.mp4', target: '/assets/animation/pink-expression.mp4' },
   { html: 'assets/animation/滑雪视频.mp4', source: 'assets/animation/滑雪视频.mp4', target: '/assets/animation/skiing.mp4' },
-  { html: 'assets/animation/开屏打招呼-新版.mp4', source: 'assets/animation/开屏打招呼-新版.mp4', target: '/assets/animation/opening-new.mp4' },
+  { html: 'assets/animation/开屏打招呼-剪辑.mp4', source: 'assets/animation/开屏打招呼-剪辑.mp4', target: '/assets/animation/opening-new.mp4' },
   { html: 'assets/animation/压腿视频.mp4', source: 'assets/animation/压腿视频.mp4', target: '/assets/animation/stretching.mp4' },
   { html: 'assets/animation/办公视频.mp4', source: 'assets/animation/办公视频.mp4', target: '/assets/animation/office.mp4' },
   { html: 'assets/IP/不羁.png', source: 'assets/processed/ip/free-spirit.png', target: '/assets/ip/free-spirit.png' },
@@ -42,3 +42,4 @@ await writeFile(
   `export const INDEX_HTML = ${JSON.stringify(html)};\n`,
   'utf8'
 );
+
