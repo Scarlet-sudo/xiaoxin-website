@@ -21,10 +21,6 @@ const assets = [
   { html: 'assets/IP/transparent/滑雪.png', source: 'assets/processed/ip/transparent/skiing.png', target: '/assets/ip/transparent/skiing.png' },
 ];
 
-const mediaContentTypes = new Map([
-  ['.mp4', 'video/mp4'],
-  ['.png', 'image/png'],
-]);
 
 const publicFiles = [
   {
@@ -63,21 +59,6 @@ await writeFile(
   'utf8'
 );
 
-const generatedAssets = [];
-for (const asset of assets) {
-  const source = path.join(root, ...asset.source.split('/'));
-  const bytes = await readFile(source);
-  generatedAssets.push({
-    path: asset.target,
-    contentType: mediaContentTypes.get(path.extname(asset.target)) ?? 'application/octet-stream',
-    base64: bytes.toString('base64'),
-  });
-}
-await writeFile(
-  path.join(appDir, 'generated-assets.ts'),
-  `export const SITE_ASSETS = ${JSON.stringify(generatedAssets)} as const;\n`,
-  'utf8'
-);
 await writeFile(
   path.join(appDir, 'generated-html.ts'),
   `export const INDEX_HTML = ${JSON.stringify(html)};\n`,
