@@ -21,6 +21,13 @@ const assets = [
   { html: 'assets/IP/transparent/滑雪.png', source: 'assets/processed/ip/transparent/skiing.png', target: '/assets/ip/transparent/skiing.png' },
 ];
 
+const publicFiles = [
+  {
+    source: '小红书搜索链路优化作品集.pdf',
+    target: '/docs/xiaohongshu-ai-shopping-portfolio.pdf',
+  },
+];
+
 let html = await readFile(path.join(root, 'index.html'), 'utf8');
 
 for (const asset of assets) {
@@ -32,6 +39,13 @@ await rm(path.join(publicDir, 'assets'), { recursive: true, force: true });
 for (const asset of assets) {
   const source = path.join(root, ...asset.source.split('/'));
   const target = path.join(publicDir, ...asset.target.slice(1).split('/'));
+  await mkdir(path.dirname(target), { recursive: true });
+  await copyFile(source, target);
+}
+
+for (const file of publicFiles) {
+  const source = path.join(root, ...file.source.split('/'));
+  const target = path.join(publicDir, ...file.target.slice(1).split('/'));
   await mkdir(path.dirname(target), { recursive: true });
   await copyFile(source, target);
 }
