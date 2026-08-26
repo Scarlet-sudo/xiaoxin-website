@@ -3,3 +3,7 @@ node_modules/
 *.tgz
 .site-package-stage/
 .preview-shots/
+public/assets/
+app/generated-html.ts
+.next/
+.wrangler/
