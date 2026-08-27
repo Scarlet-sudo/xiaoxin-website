@@ -14,7 +14,18 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
 
   if (url.pathname.startsWith('/assets/')) {
-    return cloudflareEnv.ASSETS?.fetch(request) ?? new Response('Asset not found', { status: 404 });
+    const assetResponse = await cloudflareEnv.ASSETS?.fetch(request);
+    if (!assetResponse) return new Response('Asset not found', { status: 404 });
+    if (url.pathname.endsWith('.webp')) {
+      const headers = new Headers(assetResponse.headers);
+      headers.set('content-type', 'image/webp');
+      return new Response(assetResponse.body, {
+        status: assetResponse.status,
+        statusText: assetResponse.statusText,
+        headers,
+      });
+    }
+    return assetResponse;
   }
 
   if (url.pathname === '/docs/xiaohongshu-ai-shopping-portfolio.pdf') {
