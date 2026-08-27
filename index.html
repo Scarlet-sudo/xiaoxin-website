@@ -6,8 +6,6 @@
   <title>WANGHAIXIN</title>
   <link rel="preload" as="video" href="assets/animation/开屏打招呼-剪辑.mp4?v=2" type="video/mp4" fetchpriority="high">
   <link rel="preload" as="image" href="assets/IP/看手机-透明.png?v=6" fetchpriority="high">
-  <link rel="preload" as="video" href="assets/animation/滑雪视频.mp4?v=1" type="video/mp4">
-  <link rel="preload" as="image" href="assets/IP/transparent/滑雪.png">
   <style>
     :root {
       --hero-bg: #c8cbe0;
@@ -2345,7 +2343,7 @@
       </nav>
 
       <div class="character-figure" id="characterFigure" aria-label="滑雪动态形象">
-        <video id="characterVideo" src="assets/animation/滑雪视频.mp4?v=1" autoplay muted loop playsinline preload="auto"></video>
+        <video id="characterVideo" data-src="assets/animation/滑雪视频.mp4?v=1" autoplay muted loop playsinline preload="none"></video>
         <canvas id="characterCanvas"></canvas>
         <img class="character-poster" src="assets/IP/transparent/滑雪.png" alt="">
       </div>
@@ -2411,7 +2409,7 @@
       </nav>
 
       <div class="cutout-figure skills-figure" data-video="assets/animation/压腿视频.mp4?v=1" data-poster="assets/IP/运动.png" aria-label="运动动态形象">
-        <video autoplay muted loop playsinline preload="auto"></video>
+        <video autoplay muted loop playsinline preload="none"></video>
         <canvas></canvas>
         <img src="assets/IP/运动.png" alt="">
       </div>
@@ -2567,7 +2565,7 @@
         </a>
 
         <div class="cutout-figure works-figure" data-video="assets/animation/粉色怪表情视频.mp4?v=2" data-poster="assets/IP/俏皮.png" data-cap="assets/IP/transparent/俏皮.png" aria-label="粉色动态形象">
-          <video autoplay muted loop playsinline preload="auto"></video>
+          <video autoplay muted loop playsinline preload="none"></video>
           <canvas></canvas>
           <img src="assets/IP/俏皮.png" alt="">
         </div>
@@ -2586,7 +2584,7 @@
       </nav>
 
       <div class="cutout-figure why-figure" data-video="assets/animation/办公视频.mp4?v=2" data-poster="assets/IP/办公.png" aria-label="办公动态形象">
-        <video autoplay muted loop playsinline preload="auto"></video>
+        <video autoplay muted loop playsinline preload="none"></video>
         <canvas></canvas>
         <img src="assets/IP/办公.png" alt="">
       </div>
@@ -2656,7 +2654,7 @@
         <div class="soft-piece three"><span><small>03</small>我做过什么</span></div>
         <div class="soft-piece four"><span><small>04</small>我为什么<br>来到这里</span></div>
         <div class="cutout-figure final-figure" data-video="assets/animation/不羁视频.mp4?v=2" data-poster="assets/IP/不羁.png" aria-label="最终动态形象">
-          <video autoplay muted loop playsinline preload="auto"></video>
+          <video autoplay muted loop playsinline preload="none"></video>
           <canvas></canvas>
           <img src="assets/IP/不羁.png" alt="">
         </div>
@@ -2897,6 +2895,40 @@
       }, 3500);
     }
 
+    function runWhenNear(element, callback, rootMargin = "700px 0px") {
+      let hasRun = false;
+      const run = () => {
+        if (hasRun) return;
+        hasRun = true;
+        callback();
+      };
+      if (!("IntersectionObserver" in window)) {
+        setTimeout(run, 900);
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        run();
+      }, { rootMargin, threshold: 0 });
+      observer.observe(element);
+    }
+
+    function afterOpeningStarts(callback) {
+      let hasRun = false;
+      const run = () => {
+        if (hasRun) return;
+        hasRun = true;
+        setTimeout(callback, 500);
+      };
+      if (hasStarted) run();
+      else {
+        video.addEventListener("loadeddata", run, { once: true });
+        video.addEventListener("error", run, { once: true });
+        setTimeout(run, 2500);
+      }
+    }
+
     const characterStage = document.getElementById("characterFigure");
     const characterVideo = document.getElementById("characterVideo");
     const characterCanvas = document.getElementById("characterCanvas");
@@ -3014,17 +3046,27 @@
     });
     window.addEventListener("resize", fitCharacterCanvas);
 
-    if (characterVideo.readyState >= 2) {
-      bootCharacterVideo();
-    } else {
-      characterVideo.load();
-      setTimeout(() => {
-        if (!characterStarted && characterVideo.readyState >= 2) bootCharacterVideo();
-        if (!characterStarted && characterVideo.readyState < 2) {
-          characterVideo.load();
-        }
-      }, 3500);
+    function startCharacterLoading() {
+      if (characterVideo.dataset.loading === "true") return;
+      characterVideo.dataset.loading = "true";
+      characterVideo.src = characterVideo.dataset.src;
+      characterVideo.preload = "auto";
+      if (characterVideo.readyState >= 2) {
+        bootCharacterVideo();
+      } else {
+        characterVideo.load();
+        setTimeout(() => {
+          if (!characterStarted && characterVideo.readyState >= 2) bootCharacterVideo();
+          if (!characterStarted && characterVideo.readyState < 2) {
+            characterVideo.load();
+          }
+        }, 2000);
+      }
     }
+
+    document.querySelector(".start-link")?.addEventListener("pointerenter", startCharacterLoading, { once: true });
+    document.querySelector(".start-link")?.addEventListener("click", startCharacterLoading);
+    afterOpeningStarts(() => runWhenNear(characterStage, startCharacterLoading, "300px 0px"));
 
     function initCutoutFigure(wrapper) {
       const localVideo = wrapper.querySelector("video");
@@ -3047,7 +3089,6 @@
       let started = false;
       let sampledBg = [251, 247, 241];
 
-      localVideo.src = wrapper.dataset.video;
       localImage.src = wrapper.dataset.poster;
       if (worksCapImage) {
         worksCapImage.addEventListener("load", () => {
@@ -3410,11 +3451,20 @@
         }
       });
       window.addEventListener("resize", fitLocalCanvas);
-      localVideo.load();
-      setTimeout(() => {
-        if (!started && localVideo.readyState >= 2) bootLocalVideo();
-        if (!started && localVideo.readyState < 2) localVideo.load();
-      }, 3500);
+
+      function startLocalLoading() {
+        if (localVideo.dataset.loading === "true") return;
+        localVideo.dataset.loading = "true";
+        localVideo.src = wrapper.dataset.video;
+        localVideo.preload = "auto";
+        localVideo.load();
+        setTimeout(() => {
+          if (!started && localVideo.readyState >= 2) bootLocalVideo();
+          if (!started && localVideo.readyState < 2) localVideo.load();
+        }, 2000);
+      }
+
+      afterOpeningStarts(() => runWhenNear(wrapper, startLocalLoading, "900px 0px"));
     }
 
     document.querySelectorAll(".cutout-figure[data-video]").forEach(initCutoutFigure);
