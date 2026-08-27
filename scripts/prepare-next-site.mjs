@@ -14,7 +14,7 @@ const assets = [
   { html: 'assets/animation/办公视频.mp4', source: 'assets/animation/办公视频.mp4', target: '/assets/animation/office.mp4' },
   { html: 'assets/IP/不羁.png', source: 'assets/processed/ip/free-spirit.png', target: '/assets/ip/free-spirit.png' },
   { html: 'assets/IP/办公.png', source: 'assets/processed/ip/office.png', target: '/assets/ip/office.png' },
-  { html: 'assets/IP/看手机-透明.png', source: 'assets/processed/ip/phone-transparent.png', target: '/assets/ip/phone-transparent.png' },
+  { html: 'assets/IP/看手机-透明.png', source: 'assets/processed/ip/phone-transparent.webp', target: '/assets/ip/phone-transparent.webp' },
   { html: 'assets/IP/俏皮.png', source: 'assets/processed/ip/playful.png', target: '/assets/ip/playful.png' },
   { html: 'assets/IP/运动.png', source: 'assets/processed/ip/sport.png', target: '/assets/ip/sport.png' },
   { html: 'assets/IP/transparent/俏皮.png', source: 'assets/processed/ip/transparent/playful.png', target: '/assets/ip/transparent/playful.png' },
