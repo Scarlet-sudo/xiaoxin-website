@@ -6,6 +6,7 @@
   <title>WANGHAIXIN</title>
   <link rel="preload" as="video" href="assets/animation/开屏打招呼-剪辑.mp4?v=2" type="video/mp4" fetchpriority="high">
   <link rel="preload" as="image" href="assets/IP/看手机-透明.png?v=6" fetchpriority="high">
+  <link rel="preload" as="image" href="public/docs/wanghaixin-contact-card.jpg">
   <style>
     :root {
       --hero-bg: #c8cbe0;
@@ -1626,6 +1627,7 @@
     .modal-image {
       display: none;
       width: 100%;
+      aspect-ratio: 542 / 304;
       max-height: min(60vh, 520px);
       object-fit: contain;
       border-radius: 10px;
@@ -2695,7 +2697,7 @@
       <div class="modal-box">
         <h3 id="modalTitle"></h3>
         <p id="modalBody"></p>
-        <img class="modal-image" id="modalImage" alt="">
+        <img class="modal-image" id="modalImage" src="public/docs/wanghaixin-contact-card.jpg" alt="">
         <button class="modal-close" type="button">关闭</button>
       </div>
     </div>
@@ -3538,12 +3540,13 @@
         modalTitle.textContent = trigger.dataset.modalTitle;
         modalBody.textContent = trigger.dataset.modalBody || "";
         if (trigger.dataset.modalImage) {
-          modalImage.src = trigger.dataset.modalImage;
+          if (modalImage.getAttribute("src") !== trigger.dataset.modalImage) {
+            modalImage.src = trigger.dataset.modalImage;
+          }
           modalImage.alt = trigger.dataset.modalImageAlt || "";
           modalImage.classList.add("is-visible");
           modalBody.hidden = true;
         } else {
-          modalImage.removeAttribute("src");
           modalImage.alt = "";
           modalImage.classList.remove("is-visible");
           modalBody.hidden = false;
