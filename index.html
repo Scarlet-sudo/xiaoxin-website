@@ -1557,6 +1557,11 @@
     }
 
     .final-button {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
       width: 224px;
       min-height: 78px;
       border: 1px solid #6da061;
@@ -1566,6 +1571,8 @@
       font: inherit;
       font-size: 1.35rem;
       line-height: 1.18;
+      text-align: center;
+      text-decoration: none;
       cursor: pointer;
     }
 
@@ -2666,7 +2673,7 @@
         <p>谢谢你花时间认识我！</p>
         <p>期待有机会一起创造有价值的产品。</p>
         <div class="final-actions">
-          <button class="final-button" type="button" data-modal-title="查看简历" data-modal-body="这里保留简历入口。当前项目文件夹里暂未发现简历 PDF；给我 PDF 文件后，我会把这个按钮改成直接打开简历。"><strong>查看简历</strong>Resume</button>
+          <a class="final-button" href="public/docs/wanghaixin-ai-product-manager-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="打开王海馨 AI 产品经理简历"><strong>查看简历</strong>Resume</a>
           <button class="final-button is-filled" type="button" data-modal-title="联系我吧" data-modal-body="这里保留联系方式入口。可以放微信、邮箱、电话或作品集链接；你给我具体联系方式后，我会直接写进弹窗。"><strong>联系我吧</strong>Let's Talk</button>
         </div>
       </div>
