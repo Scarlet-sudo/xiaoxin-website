@@ -1623,6 +1623,18 @@
       line-height: 1.7;
     }
 
+    .modal-image {
+      display: none;
+      width: 100%;
+      max-height: min(60vh, 520px);
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .modal-image.is-visible {
+      display: block;
+    }
+
     .modal-close {
       margin-top: 22px;
       height: 44px;
@@ -2674,7 +2686,7 @@
         <p>期待有机会一起创造有价值的产品。</p>
         <div class="final-actions">
           <a class="final-button" href="public/docs/wanghaixin-ai-product-manager-resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="打开王海馨 AI 产品经理简历"><strong>查看简历</strong>Resume</a>
-          <button class="final-button is-filled" type="button" data-modal-title="联系我吧" data-modal-body="这里保留联系方式入口。可以放微信、邮箱、电话或作品集链接；你给我具体联系方式后，我会直接写进弹窗。"><strong>联系我吧</strong>Let's Talk</button>
+          <button class="final-button is-filled" type="button" data-modal-title="联系我吧" data-modal-image="public/docs/wanghaixin-contact-card.jpg" data-modal-image-alt="王海馨联系方式"><strong>联系我吧</strong>Let's Talk</button>
         </div>
       </div>
     </section>
@@ -2683,6 +2695,7 @@
       <div class="modal-box">
         <h3 id="modalTitle"></h3>
         <p id="modalBody"></p>
+        <img class="modal-image" id="modalImage" alt="">
         <button class="modal-close" type="button">关闭</button>
       </div>
     </div>
@@ -3516,13 +3529,25 @@
     const modal = document.getElementById("infoModal");
     const modalTitle = document.getElementById("modalTitle");
     const modalBody = document.getElementById("modalBody");
+    const modalImage = document.getElementById("modalImage");
     const modalClose = modal.querySelector(".modal-close");
 
     document.querySelectorAll("[data-modal-title]").forEach((trigger) => {
       trigger.addEventListener("click", (event) => {
         event.preventDefault();
         modalTitle.textContent = trigger.dataset.modalTitle;
-        modalBody.textContent = trigger.dataset.modalBody;
+        modalBody.textContent = trigger.dataset.modalBody || "";
+        if (trigger.dataset.modalImage) {
+          modalImage.src = trigger.dataset.modalImage;
+          modalImage.alt = trigger.dataset.modalImageAlt || "";
+          modalImage.classList.add("is-visible");
+          modalBody.hidden = true;
+        } else {
+          modalImage.removeAttribute("src");
+          modalImage.alt = "";
+          modalImage.classList.remove("is-visible");
+          modalBody.hidden = false;
+        }
         modal.classList.add("is-open");
         modalClose.focus();
       });
