@@ -1,0 +1,194 @@
+name: Apply interaction hints
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/apply-interaction-hints.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply-hints:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch static site
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("index.html")
+          html = path.read_text(encoding="utf-8")
+
+          if "xiaoxin-interaction-hints-v1" in html:
+              print("Interaction hints already applied")
+              raise SystemExit(0)
+
+          css = r'''
+    /* xiaoxin-interaction-hints-v1 */
+    .skill-item,
+    .build-row {
+      position: relative;
+    }
+
+    .interaction-hint {
+      position: absolute;
+      right: 16px;
+      bottom: 9px;
+      margin: 0;
+      color: #6f7373;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: lowercase;
+      opacity: 0.24;
+      pointer-events: none;
+      transition: opacity 220ms ease-out, transform 220ms ease-out;
+    }
+
+    .skill-item:hover .interaction-hint,
+    .skill-item:focus-visible .interaction-hint,
+    .skill-item.is-expanded .interaction-hint,
+    .build-row:hover .interaction-hint,
+    .build-row:focus-visible .interaction-hint,
+    .build-row.is-expanded .interaction-hint {
+      opacity: 0.82;
+      transform: translateY(-1px);
+    }
+
+    .laptop-link.center::before,
+    .laptop-link.right::before {
+      content: "open";
+      position: absolute;
+      left: 50%;
+      top: -25px;
+      transform: translateX(-50%);
+      color: #fb5870;
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: lowercase;
+      opacity: 0.28;
+      pointer-events: none;
+      transition: opacity 220ms ease-out, transform 220ms ease-out;
+    }
+
+    .laptop-link.center:hover::before,
+    .laptop-link.center:focus-visible::before,
+    .laptop-link.right:hover::before,
+    .laptop-link.right:focus-visible::before,
+    .laptop-link.center.is-selected::before {
+      opacity: 0.84;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    .timeline-item .timeline-dot {
+      --timeline-hint-delay: 0s;
+      animation: timeline-hint-pulse 7s ease-in-out infinite;
+      animation-delay: var(--timeline-hint-delay);
+    }
+
+    .timeline-item:nth-of-type(2) .timeline-dot { --timeline-hint-delay: 1s; }
+    .timeline-item:nth-of-type(3) .timeline-dot { --timeline-hint-delay: 2s; }
+    .timeline-item:nth-of-type(4) .timeline-dot { --timeline-hint-delay: 3s; }
+    .timeline-item:nth-of-type(5) .timeline-dot { --timeline-hint-delay: 4s; }
+    .timeline-item:nth-of-type(6) .timeline-dot { --timeline-hint-delay: 5s; }
+    .timeline-item:nth-of-type(7) .timeline-dot { --timeline-hint-delay: 6s; }
+
+    .timeline-item.is-hint-stopped .timeline-dot {
+      animation: none;
+    }
+
+    @keyframes timeline-hint-pulse {
+      0%, 10%, 100% {
+        box-shadow: none;
+        transform: scale(1);
+        background: #fbf7f1;
+      }
+      4% {
+        box-shadow: 0 0 0 8px rgba(45, 145, 231, 0.12);
+        transform: scale(1.24);
+        background: rgba(45, 145, 231, 0.78);
+      }
+    }
+
+    .timeline-dot.is-pink {
+      background: #fb5870;
+    }
+
+    .timeline-dot.is-blue {
+      background: #2d91e7;
+    }
+
+    .timeline-item.is-reached .timeline-dot {
+      animation: none;
+    }
+
+    @media (max-width: 900px) {
+      .interaction-hint {
+        right: 14px;
+        bottom: 8px;
+        font-size: 0.58rem;
+      }
+
+      .laptop-link.center::before,
+      .laptop-link.right::before {
+        top: -22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .timeline-item .timeline-dot {
+        animation: none;
+      }
+    }
+'''
+
+          html = html.replace("\n  </style>", css + "\n  </style>", 1)
+
+          skill_marker = '<span class="interaction-hint" aria-hidden="true">move to discover</span>'
+          skill_targets = [
+              '            <article class="skill-item" tabindex="0">',
+              '            <article class="skill-item" tabindex="0">',
+              '            <article class="skill-item" tabindex="0">',
+              '            <article class="build-row" tabindex="0">',
+              '            <article class="build-row" tabindex="0">',
+              '            <article class="build-row" tabindex="0">',
+          ]
+          for target in skill_targets:
+              if target in html:
+                  html = html.replace(target, target + "\n" + skill_marker, 1)
+
+          timeline_script = r'''
+
+    // xiaoxin-interaction-hints-v1: stop the guidance pulse once a timeline point is actually chosen.
+    if (timeline) {
+      const timelineItemsForHint = Array.from(timeline.querySelectorAll(".timeline-item"));
+      timelineItemsForHint.forEach((item) => {
+        const stopHint = () => item.classList.add("is-hint-stopped");
+        item.addEventListener("click", stopHint, { once: true });
+        item.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") stopHint();
+        });
+      });
+    }
+'''
+          script_end = "\n  </script>"
+          html = html.rsplit(script_end, 1)[0] + timeline_script + script_end + html.rsplit(script_end, 1)[1]
+
+          path.write_text(html, encoding="utf-8")
+          print("Interaction hints applied")
+          PY
+
+      - name: Commit patched site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "feat: add interaction guidance hints"
+          git push
