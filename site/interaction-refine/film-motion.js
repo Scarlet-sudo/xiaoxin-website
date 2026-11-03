@@ -1,5 +1,5 @@
 (() => {
-  const strip=document.querySelector('.film-strip');
+  const strip=document.querySelector('.film-strip');if(!strip)return;
   const tray=strip.querySelector('.character-cards');
   const originals=[...tray.children];
   const ns='http://www.w3.org/2000/svg';

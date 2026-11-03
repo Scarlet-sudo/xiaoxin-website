@@ -1,8 +1,8 @@
 (() => {
- const poster=document.querySelector('#home img.collage-art'),canvas=document.querySelector('.cover-foreground'),ctx=canvas.getContext('2d'),original=new Image();original.src='/xiaoxin-website/site/collage-cover/cover-ip-v3.webp';
+ const canvas=document.querySelector('.cover-foreground');if(canvas){const ctx=canvas.getContext('2d'),original=new Image();original.src='/xiaoxin-website/site/collage-cover/cover-ip-v3.webp';
  const foreground=new Path2D('M750 501 C780 470 810 468 841 486 C880 520 896 568 920 622 L926 776 L908 920 L650 941 L640 865 L675 752 L686 640 L704 560 Z M930 555 C965 534 996 532 1018 550 C1070 592 1096 645 1133 690 L1200 737 L1340 895 L1280 941 L1090 941 L1018 796 L965 702 L917 622 Z M470 575 L477 535 L540 577 L589 561 L644 551 L673 541 L693 580 L711 628 L713 690 L700 752 L678 805 L659 845 L547 879 L429 881 L343 860 L365 741 L409 647 Z');
  function draw(){ctx.clearRect(0,0,1672,941);ctx.save();ctx.clip(foreground);ctx.drawImage(original,0,0,1672,941);ctx.restore();canvas.dataset.composite='original-seated-foreground';}original.addEventListener('load',draw);if(original.complete)draw();
- const section=document.querySelector('#works'),papers=[...section.querySelectorAll('.project-paper')],hotspots=[...section.querySelectorAll('.laptop-hotspot')];
+ }const section=document.querySelector('#works');if(!section)return;const papers=[...section.querySelectorAll('.project-paper')],hotspots=[...section.querySelectorAll('.laptop-hotspot')];
  const shapes=[
  ['polygon(19.5% 20%,38% 26%,39.2% 46%,44.5% 48%,44.5% 50.6%,22.5% 50%,21.2% 46%)','polygon(2% 23%,21.8% 24%,21.8% 33%,20.7% 43.5%,4% 44%,3% 35%)'],
  ['polygon(62% 27%,80.5% 21%,78.2% 50%,69% 54%,55% 54%,55% 51%,61% 48%)','polygon(79.5% 23%,96% 22%,95% 35%,94% 44%,80% 45%)'],

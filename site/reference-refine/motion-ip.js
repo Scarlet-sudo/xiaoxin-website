@@ -3,7 +3,7 @@
  const stages=[...document.querySelectorAll('.motion-ip[data-video]')];
  stages.forEach(stage=>{
   const file=stage.dataset.video.split('/').pop(),slug=slugs[file];if(!slug)return;
-  const root='/xiaoxin-website/site/reference-refine/loops'+slug;
+  const root='/xiaoxin-website/site/reference-refine/loops/'+slug;
   const poster=document.createElement('img');poster.src=root+'-poster.png';poster.alt='';stage.append(poster);
   const animation=document.createElement('img');animation.className='loop-image';animation.alt='';animation.decoding='async';stage.append(animation);
   let visible=false,mode='';

@@ -5,9 +5,29 @@
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   {
+    "path": "capability/index.html",
+    "bytes": 5552,
+    "sha256": "de04c4ef8b66fc8cf3b1acf348eec58190e2963a446dc3215e47857a517ae35f"
+  },
+  {
+    "path": "character/index.html",
+    "bytes": 6832,
+    "sha256": "f8de1ae9321173e909602401e6e3edfe0fe38d6fded04222cf2d365e778093f8"
+  },
+  {
+    "path": "contact/index.html",
+    "bytes": 6568,
+    "sha256": "f586b33aa3069cbc13151ee38b580d113625d1c11e32e91c231274f459435f51"
+  },
+  {
+    "path": "evidence/index.html",
+    "bytes": 6741,
+    "sha256": "85d022cf4d72bec9ac6ee4805ef3742d9b3cbdb18aa46ce71a59238f0b875758"
+  },
+  {
     "path": "index.html",
-    "bytes": 10793,
-    "sha256": "04d9f459a3a2eb23e20828b2221bad4f56edceabf0a0868b976bf29bf1243025"
+    "bytes": 7623,
+    "sha256": "fd49e49d5cd886fbc6a13c39ef6108b5dca9eb7577ec989e782d6a4a314b9f13"
   },
   {
     "path": "site/capability-study/background-plate.webp",
@@ -56,8 +76,8 @@
   },
   {
     "path": "site/interaction-refine/capability.html",
-    "bytes": 6743,
-    "sha256": "d7a3b5c9616c158f1d618f6311e51dad99c50feb1f489ab1bb6f31052a087e54"
+    "bytes": 6776,
+    "sha256": "fa2c6a4cf5d08574e14da2f84582ecb98db391d9a6bd22466f8658c49b886179"
   },
   {
     "path": "site/interaction-refine/chapter-refinement.css",
@@ -76,8 +96,8 @@
   },
   {
     "path": "site/interaction-refine/detail-chapters.css",
-    "bytes": 2695,
-    "sha256": "9a3725ca768579981fce8cf91837b81a1906eeac3f1fd0e8378b80db05a2a41b"
+    "bytes": 4404,
+    "sha256": "40534345e8c55b8c9381729f97b6435d0108ec2a20448dd8a79220e2570dc6cc"
   },
   {
     "path": "site/interaction-refine/detail-chapters.js",
@@ -91,13 +111,13 @@
   },
   {
     "path": "site/interaction-refine/details.js",
-    "bytes": 3597,
-    "sha256": "72d743d7ef7c5aa8afed27a5966332512db74550c0614a10e1bfed6175bc4ec8"
+    "bytes": 3585,
+    "sha256": "645e52354a57b7bdadefd027fa1080fba47eea1082117e4780fbc2d2c3c69e20"
   },
   {
     "path": "site/interaction-refine/film-motion.js",
-    "bytes": 4244,
-    "sha256": "20e08591ebcd44c50d9b93fcd685664f1d1074a11e63b7959af1477c750766a1"
+    "bytes": 4261,
+    "sha256": "baec2b8e55660e64439673ac924cac154fd5be398af3b1f4b5791acb472e6d7d"
   },
   {
     "path": "site/interaction-refine/final-background.webp",
@@ -106,8 +126,8 @@
   },
   {
     "path": "site/interaction-refine/interaction.js",
-    "bytes": 2000,
-    "sha256": "017c3e14715e90438744ad6907a8e0fd91de3ce694e6f3192765bc87e41a6063"
+    "bytes": 3604,
+    "sha256": "281671cccf5e72593b9a7a5d5095e40ec1f3b2a5fe32ef57e702d059b7a1b417"
   },
   {
     "path": "site/interaction-refine/loops/cover-upper.webp",
@@ -116,8 +136,8 @@
   },
   {
     "path": "site/interaction-refine/motion-ip.js",
-    "bytes": 1816,
-    "sha256": "41e852482af346abd67fd4b33cc9e4704999dcfa48ab34657d7542ee7efdf073"
+    "bytes": 1817,
+    "sha256": "ae56eaa239ec5250f2e8970ec749f35f916487a93b245025c6c6678dfb3fb0db"
   },
   {
     "path": "site/interaction-refine/motion.css",
@@ -141,13 +161,13 @@
   },
   {
     "path": "site/interaction-refine/review.js",
-    "bytes": 3563,
-    "sha256": "ebcf09295f52fe2b817f700dd5b498dc812bc639af77dfe32051b50b17b3e71a"
+    "bytes": 3588,
+    "sha256": "bedf8707316d0b35ee26db149640df94752b0a094e5b2c377a710a6663dbc300"
   },
   {
     "path": "site/interaction-refine/trajectory.html",
-    "bytes": 7026,
-    "sha256": "879a1a00d3fb3f0d0d6aa5abafea4c77a8d451893777c4504162965ff4fda199"
+    "bytes": 7065,
+    "sha256": "d55a6b5ee7155c47d229b21a50815831de612de2780c950a25f3599bbb5f49ce"
   },
   {
     "path": "site/interaction-refine/wanghaixin-resume.pdf",
@@ -198,6 +218,11 @@
     "path": "site/motion-refine/shoujin-7.ttf",
     "bytes": 67264,
     "sha256": "fc23d11a10a6639ed128502aef6a4de8277f9136bb8669900bdbfd2162e6894e"
+  },
+  {
+    "path": "site/navigation/page.css",
+    "bytes": 2724,
+    "sha256": "46a562ab0fe66608f1e558ad2258c2bf77b637756cdf5f1066d395df45bdc35d"
   },
   {
     "path": "site/reference-refine/capability-plate.webp",
@@ -271,8 +296,8 @@
   },
   {
     "path": "site/reference-refine/motion-ip.js",
-    "bytes": 1816,
-    "sha256": "41e852482af346abd67fd4b33cc9e4704999dcfa48ab34657d7542ee7efdf073"
+    "bytes": 1817,
+    "sha256": "ae56eaa239ec5250f2e8970ec749f35f916487a93b245025c6c6678dfb3fb0db"
   },
   {
     "path": "site/shared/assets/IP/transparent/办公.webp",
@@ -308,5 +333,10 @@
     "path": "site/trajectory-study/study.js",
     "bytes": 1630,
     "sha256": "b4b18b6bcbddbdd4610679e251eb80d3ecabe4ab0903627373dd083034218299"
+  },
+  {
+    "path": "trajectory/index.html",
+    "bytes": 5562,
+    "sha256": "577dd4bba0f690ea1662656337299fdb09429c3481883896d065ed037781117b"
   }
 ]
