@@ -7,27 +7,27 @@
   {
     "path": "capability/index.html",
     "bytes": 5552,
-    "sha256": "de04c4ef8b66fc8cf3b1acf348eec58190e2963a446dc3215e47857a517ae35f"
+    "sha256": "3eacf427df10699a3af93072413cff8fa419931b80cf3ddee8e47b7b470164e3"
   },
   {
     "path": "character/index.html",
     "bytes": 6832,
-    "sha256": "f8de1ae9321173e909602401e6e3edfe0fe38d6fded04222cf2d365e778093f8"
+    "sha256": "0f96e1918715b1065e32636ac72a666ec9738d2eab54262fc935b3c616c59b96"
   },
   {
     "path": "contact/index.html",
     "bytes": 6568,
-    "sha256": "f586b33aa3069cbc13151ee38b580d113625d1c11e32e91c231274f459435f51"
+    "sha256": "ba88034db539ede70a86e3159aef48a0d6db7341b6b2d3d95d7313ce7d49b017"
   },
   {
     "path": "evidence/index.html",
     "bytes": 6741,
-    "sha256": "85d022cf4d72bec9ac6ee4805ef3742d9b3cbdb18aa46ce71a59238f0b875758"
+    "sha256": "f45e79604eaced3f09b5a65fdeec8f965d68527e9c0d8980244e93b73ec8d48b"
   },
   {
     "path": "index.html",
     "bytes": 7623,
-    "sha256": "fd49e49d5cd886fbc6a13c39ef6108b5dca9eb7577ec989e782d6a4a314b9f13"
+    "sha256": "ddd4f9cba0bcc77b0f62a789804494bf9442d1c51da75f4e9dfd00959929afe2"
   },
   {
     "path": "site/capability-study/background-plate.webp",
@@ -77,7 +77,7 @@
   {
     "path": "site/interaction-refine/capability.html",
     "bytes": 6776,
-    "sha256": "fa2c6a4cf5d08574e14da2f84582ecb98db391d9a6bd22466f8658c49b886179"
+    "sha256": "e53c280777b912f668934068081d1b006af2bfdb05c36b830a5456f87292cd34"
   },
   {
     "path": "site/interaction-refine/chapter-refinement.css",
@@ -96,8 +96,8 @@
   },
   {
     "path": "site/interaction-refine/detail-chapters.css",
-    "bytes": 4404,
-    "sha256": "40534345e8c55b8c9381729f97b6435d0108ec2a20448dd8a79220e2570dc6cc"
+    "bytes": 5006,
+    "sha256": "0ebbfae4dbd3070a5db831bd867209b3a3e79cd722c8ada76166007eb7d528d9"
   },
   {
     "path": "site/interaction-refine/detail-chapters.js",
@@ -126,8 +126,8 @@
   },
   {
     "path": "site/interaction-refine/interaction.js",
-    "bytes": 3604,
-    "sha256": "281671cccf5e72593b9a7a5d5095e40ec1f3b2a5fe32ef57e702d059b7a1b417"
+    "bytes": 3431,
+    "sha256": "3bd873d936625439b4cf72941d28c5806c908a6c7e95e0f61ae3895106b11a81"
   },
   {
     "path": "site/interaction-refine/loops/cover-upper.webp",
@@ -167,7 +167,7 @@
   {
     "path": "site/interaction-refine/trajectory.html",
     "bytes": 7065,
-    "sha256": "d55a6b5ee7155c47d229b21a50815831de612de2780c950a25f3599bbb5f49ce"
+    "sha256": "6b1e6433e51c233b67abda19940b2235059adf6bf072687176887d35b1fd4425"
   },
   {
     "path": "site/interaction-refine/wanghaixin-resume.pdf",
@@ -337,6 +337,6 @@
   {
     "path": "trajectory/index.html",
     "bytes": 5562,
-    "sha256": "577dd4bba0f690ea1662656337299fdb09429c3481883896d065ed037781117b"
+    "sha256": "713553d30275fe9cfc0ed2b9fd433e02c3c9856a18e15b5488f542068f05688e"
   }
 ]

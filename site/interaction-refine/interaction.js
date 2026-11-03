@@ -10,15 +10,14 @@
   const a=event.target.closest('a[data-site-nav]');if(!a||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
   const url=new URL(a.href,location.href);if(url.origin!==location.origin||a.target==='_blank')return;
   event.preventDefault();if(url.pathname===location.pathname||leaving)return;
-  leaving=true;const next=Object.keys(routes).find(k=>routes[k]===url.pathname);loader.querySelector('strong').textContent=names[next]||'下一页';loader.querySelector('.loader-status').textContent='正在进入';body.classList.add('is-leaving');
+  leaving=true;try{sessionStorage.setItem('xiaoxin-navigation-start',String(Date.now()));}catch{}const next=Object.keys(routes).find(k=>routes[k]===url.pathname);loader.querySelector('strong').textContent=names[next]||'下一页';loader.querySelector('.loader-status').textContent='正在进入';body.classList.add('is-leaving');
   setTimeout(()=>location.assign(url.href),matchMedia('(prefers-reduced-motion: reduce)').matches?0:170);
  },true);
  const warm=new Set();document.querySelectorAll('a[data-site-nav]').forEach(a=>a.addEventListener('pointerenter',()=>{if(warm.has(a.href))return;warm.add(a.href);const link=document.createElement('link');link.rel='prefetch';link.href=a.href;document.head.append(link);},{once:true}));
  function ready(){body.classList.add('page-ready');body.dataset.pageState='ready';loader.setAttribute('aria-hidden','true');}
- const images=[...document.querySelectorAll('main img')].filter(i=>!i.classList.contains('loop-image'));
- const imageReady=images.map(i=>i.complete?Promise.resolve():new Promise(resolve=>{i.addEventListener('load',resolve,{once:true});i.addEventListener('error',resolve,{once:true});}));
- const frameReady=[...document.querySelectorAll('iframe')].map(f=>new Promise(resolve=>{try{if(f.contentDocument?.readyState==='complete'){resolve();return;}}catch{}f.addEventListener('load',resolve,{once:true});}));
- Promise.race([Promise.all([...imageReady,...frameReady,document.fonts.ready]),new Promise(resolve=>setTimeout(resolve,2200))]).then(ready);
+ // Keep the full transition near one second; media and fonts finish in the background.
+ let started=performance.timeOrigin;try{const value=Number(sessionStorage.getItem('xiaoxin-navigation-start'));sessionStorage.removeItem('xiaoxin-navigation-start');if(value>0&&Date.now()-value<15000)started=value;}catch{}
+ setTimeout(ready,Math.max(0,780-(Date.now()-started)));
  addEventListener('pageshow',e=>{if(e.persisted){leaving=false;body.classList.remove('is-leaving');ready();}});
  document.querySelectorAll('.character-card:not([aria-hidden])').forEach(card=>card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();card.click();}}));
  document.addEventListener('click',e=>{const clone=e.target.closest('.character-card[aria-hidden="true"]');if(!clone)return;e.stopImmediatePropagation();document.querySelector('.character-card[data-character="'+clone.dataset.character+'"]:not([aria-hidden])')?.click();},true);

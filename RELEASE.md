@@ -21,3 +21,7 @@ Fixed the missing directory separator in runtime-generated animation URLs in bot
 Immediate rollback point: codex/backup-before-pages-2026-11-03 (7d8625c2da6afef2b0904963f0f6e3ab1e4b4864).
 
 Validation: six routes each contain one chapter, local navigation and browser back, IP image naturalWidth and playing state on 01/02/03/04/contact, film/orbit behavior, keyboard-opened card measured at 22.6px with complete explanation, runtime animation/poster URL existence and JavaScript syntax.
+
+## Timing and card spacing adjustment
+
+The loader no longer waits for images, iframe loads or fonts. A navigation timestamp keeps the deliberate overlay/exit/fade sequence near one second; media continues loading in the background. Expanded capability papers now fit their actual text with 12px vertical padding and no fixed minimum height. The longest card measured 149px instead of about 236px at the checked desktop viewport, retaining 22.6px body text.
