@@ -1,0 +1,53 @@
+.legacy-opening{display:none!important}
+.collage-hero ~ #character{margin-top:100svh}
+.collage-hero{background:#100f0d;min-height:0;height:100svh;color:#fff}
+.collage-hero:before,.collage-hero:after{display:none}
+.collage-scene{position:absolute;width:max(100vw,177.6833svh);height:max(56.281vw,100svh);left:50%;top:50%;margin-left:calc(max(100vw,177.6833svh)/ -2);margin-top:calc(max(56.281vw,100svh)/ -2);container-type:inline-size;transform:translate(var(--px,0px),var(--py,0px)) scale(1.012);transition:transform .65s ease-out;animation:collage-reveal 1.1s ease-out both}
+.collage-art{width:100%;height:100%;display:block;object-fit:fill}
+.paper-mask{position:absolute;left:85.55%;top:14.2%;width:13.3%;height:64.6%;background:#100f0d;clip-path:polygon(0 4%,91% 0,100% 96%,0 100%)}
+.collage-paper{position:absolute;left:85.5%;width:13%;height:16%;background-image:url("/xiaoxin-website/site/collage-cover/reference.webp");background-size:100cqw 56.281cqw;background-repeat:no-repeat;transform:rotate(var(--turn,0deg));transition:transform .25s ease,filter .25s ease;z-index:2;filter:drop-shadow(0 6px 5px #0004);outline-offset:2px;animation:paper-arrive .8s backwards;clip-path:polygon(0 7%,98% 0,100% 93%,2% 100%)}
+.paper-0{top:14%;background-position:-85.5cqw -7.88cqw;--turn:-1deg;animation-delay:.2s}
+.paper-1{top:29.7%;background-position:-85.5cqw -16.716cqw;--turn:1deg;animation-delay:.3s}
+.paper-2{top:45.5%;background-position:-85.5cqw -25.608cqw;--turn:-1deg;animation-delay:.4s}
+.paper-3{top:61.5%;background-position:-85.5cqw -34.613cqw;--turn:1deg;animation-delay:.5s}
+.collage-paper:hover,.collage-paper:focus-visible{transform:translate(-8px,-4px) rotate(-2deg) scale(1.035);filter:drop-shadow(6px 12px 8px #0009) brightness(1.08)}
+.mobile-paper-copy{display:none}
+/* Seated IP moves directly within the composition, without a player. */
+.seated-ip-canvas{position:absolute;inset:0;pointer-events:none;opacity:0;z-index:1}
+.seated-ip-canvas.is-ready{opacity:1}
+.seated-motion-toggle{position:absolute;right:24px;bottom:18px;z-index:5;border:1px solid #ff81b780;background:#171015c9;color:#ffafd2;border-radius:25px;padding:8px 13px;font:11px 'Microsoft YaHei',sans-serif;cursor:pointer;backdrop-filter:blur(8px)}
+.seated-motion-toggle:hover{background:#64213fe6}.seated-motion-toggle:focus-visible{outline:3px solid #ff408c;outline-offset:3px}
+.collage-header{position:absolute;inset:0 0 auto;z-index:4;display:flex;align-items:center;justify-content:space-between;padding:20px 3.2% 22px 4.5%;background:linear-gradient(#100f0df5 65%,#100f0d00);gap:25px}
+.collage-logo{color:white;text-decoration:none;font:italic 38px 'Segoe Print','Comic Sans MS',cursive;white-space:nowrap;transform:rotate(-7deg)}
+.collage-logo span{color:#ff408c;font-size:46px;vertical-align:middle}
+.collage-header nav{display:flex;align-items:center;gap:clamp(20px,3.5vw,65px)}
+.collage-header nav a{font:500 clamp(12px,1.15vw,20px) Arial,sans-serif;text-decoration:none;color:white;padding:9px 0;position:relative;white-space:nowrap}
+.collage-header nav a:after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:#ff408c;transform:scaleX(0);transition:transform .2s}
+.collage-header nav a:hover:after,.collage-header nav a:focus-visible:after,.collage-header nav .home-link:after{transform:scaleX(1)}
+.collage-header nav .collage-cv{border:1.5px solid #ff408c;border-radius:30px;color:#ff408c;padding:8px 20px}
+.collage-next{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);z-index:3;color:#fff;text-decoration:none;font-size:11px;letter-spacing:3px;padding:8px 15px;background:#100f0db3;border-radius:24px;backdrop-filter:blur(8px)}
+.collage-next span{display:inline-block;animation:explore 2s ease-in-out infinite}
+.collage-hero a:focus-visible{outline:3px solid #ff408c}
+@keyframes collage-reveal{from{opacity:0;filter:brightness(.5);scale:1.025}to{opacity:1;filter:brightness(1);scale:1}}
+@keyframes paper-arrive{from{opacity:0;translate:30px 15px}to{opacity:1;translate:0 0}}
+@keyframes explore{50%{translate:0 3px}}
+@media(min-width:1001px){
+ .collage-scene{width:100%;height:100%;left:0;top:0;margin:0;translate:none;transform:none!important;container-type:size}
+ .collage-paper{background-size:100cqw 100cqh}
+ .paper-0{background-position:-85.5cqw -14cqh}
+ .paper-1{background-position:-85.5cqw -29.7cqh}
+ .paper-2{background-position:-85.5cqw -45.5cqh}
+ .paper-3{background-position:-85.5cqw -61.5cqh}
+ .collage-header{height:72px;padding:8px 4.5%;background:linear-gradient(#100f0de6,#100f0d55,transparent)}
+ .collage-logo{font-size:30px}.collage-logo span{font-size:36px}
+ .collage-header nav{gap:clamp(24px,3.5vw,65px)}
+}
+@media(max-width:1000px){
+ .collage-header{padding:12px 17px;background:#100f0de8;gap:10px}.collage-logo{font-size:25px}.collage-logo span{font-size:28px}.collage-header nav{gap:12px}.collage-header nav>a:not(.collage-cv){display:none}.collage-header nav .collage-cv{font-size:13px;padding:7px 16px}
+ .collage-scene{width:100%;height:100%;margin:0;left:0;top:0;transform:none!important;container-type:normal}.collage-art{position:absolute;top:65px;height:calc(100% - 280px);object-fit:cover;object-position:43% center;clip-path:none;mask-image:linear-gradient(#000 87%,transparent)}
+ .paper-mask{display:none}.collage-paper{left:5%;width:43%;height:92px;top:auto;bottom:133px;background:#f7b4c9;clip-path:polygon(0 4%,98% 0,100% 94%,1% 100%);padding:10px 15px;color:#14100f;text-decoration:none}.paper-1{left:52%;background:#d9c2eb}.paper-2{bottom:32px;background:#f0dace}.paper-3{left:52%;bottom:32px;background:#ed8eb6}
+ .mobile-paper-copy{display:grid;grid-template-columns:25px 1fr;column-gap:5px;align-items:start}.mobile-paper-copy i{font:bold italic 20px Georgia;grid-row:span 2}.mobile-paper-copy strong{font:bold 18px 'Microsoft YaHei',sans-serif;line-height:1.15}.mobile-paper-copy small{font:10px Arial;margin-top:7px}.collage-next{bottom:3px;font-size:9px;padding:4px 10px}
+}
+@media(prefers-reduced-motion:reduce){.collage-scene,.collage-paper,.collage-next span{animation:none!important;transition:none!important;transform:none!important}html{scroll-behavior:auto!important}}
+
+@media(max-width:1000px){.seated-motion-toggle{right:12px;bottom:5px;font-size:9px;padding:5px 9px}.seated-ip-canvas{inset:65px auto auto 0}}

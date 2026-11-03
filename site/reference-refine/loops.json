@@ -1,0 +1,50 @@
+{
+  "压腿视频.mp4": {
+    "slug": "sport",
+    "frames": 120,
+    "durationMs": 5000,
+    "bytes": 6091446,
+    "width": 544,
+    "height": 796
+  },
+  "办公视频.mp4": {
+    "slug": "office",
+    "frames": 121,
+    "durationMs": 5042,
+    "bytes": 6150864,
+    "width": 474,
+    "height": 1008
+  },
+  "不羁视频.mp4": {
+    "slug": "unruly",
+    "frames": 36,
+    "durationMs": 2988,
+    "bytes": 747244,
+    "width": 231,
+    "height": 500
+  },
+  "滑雪视频.mp4": {
+    "slug": "ski",
+    "frames": 73,
+    "durationMs": 3042,
+    "bytes": 5676460,
+    "width": 768,
+    "height": 1024
+  },
+  "粉色怪表情视频.mp4": {
+    "slug": "playful",
+    "frames": 121,
+    "durationMs": 5042,
+    "bytes": 5460640,
+    "width": 338,
+    "height": 982
+  },
+  "打招呼视频.mp4": {
+    "slug": "phone",
+    "frames": 193,
+    "durationMs": 8042,
+    "bytes": 12189726,
+    "width": 408,
+    "height": 1018
+  }
+}

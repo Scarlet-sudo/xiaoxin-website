@@ -1,0 +1,312 @@
+[
+  {
+    "path": ".nojekyll",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "index.html",
+    "bytes": 10793,
+    "sha256": "04d9f459a3a2eb23e20828b2221bad4f56edceabf0a0868b976bf29bf1243025"
+  },
+  {
+    "path": "site/capability-study/background-plate.webp",
+    "bytes": 613196,
+    "sha256": "84e9b3c34d28dc7d436730c8d79b8cd112ccb0bf1ca3c11da0b6089e285b757a"
+  },
+  {
+    "path": "site/capability-study/study.css",
+    "bytes": 6927,
+    "sha256": "0c1ba968695168b0b0a1c303c8b704ef2630c734a4492ddf324ea79fd941db8b"
+  },
+  {
+    "path": "site/collage-cover/cover-ip-v3.webp",
+    "bytes": 411924,
+    "sha256": "6e6f857dbccc8b1c0b2ca20d73a49e094f49765bd2b9b27beeac15e9139f4165"
+  },
+  {
+    "path": "site/collage-cover/cover.css",
+    "bytes": 6357,
+    "sha256": "1a5917d53cc9d4ddd328973e984b91a2b19c6b75f3753d788f6241af12b01ec7"
+  },
+  {
+    "path": "site/collage-cover/reference.webp",
+    "bytes": 490566,
+    "sha256": "a0bc5c4ee76096119a93a164f5cfbf9585603fe86fa7d0b4f427b019cbb2eea1"
+  },
+  {
+    "path": "site/collage-cover/upper-body-plate.webp",
+    "bytes": 447982,
+    "sha256": "20b692b1f8652f8c05b99702a67b4de0b5c380509b099a1ac0facd12f4a69309"
+  },
+  {
+    "path": "site/integrated-review/character-reference.webp",
+    "bytes": 523492,
+    "sha256": "b4a2db54fa0d8b0b8d4b2ed52a54213ed24c32417c3a93b89a0aba7ac1b79121"
+  },
+  {
+    "path": "site/integrated-review/evidence-reference.webp",
+    "bytes": 654136,
+    "sha256": "9b4803817a70b614f0f4e61980e4ba2f8768fc8ac63e1f3641165ccabd69c495"
+  },
+  {
+    "path": "site/integrated-review/final-reference.webp",
+    "bytes": 542246,
+    "sha256": "3022aa9fd7acd13fa30114b8dd0c860341d4fdcd18f9e09b9c7659d4f08954fa"
+  },
+  {
+    "path": "site/interaction-refine/capability.html",
+    "bytes": 6743,
+    "sha256": "d7a3b5c9616c158f1d618f6311e51dad99c50feb1f489ab1bb6f31052a087e54"
+  },
+  {
+    "path": "site/interaction-refine/chapter-refinement.css",
+    "bytes": 2392,
+    "sha256": "122f9c6ff59b101359eb9c1c6e533d6da13b32190494ea52a9465c23c6a00f7a"
+  },
+  {
+    "path": "site/interaction-refine/character-background.webp",
+    "bytes": 385488,
+    "sha256": "965d2d1e9b36c60e80e02fed8ecbace8cf5a886ceb5390905f2d5036f00ff2e0"
+  },
+  {
+    "path": "site/interaction-refine/child.css",
+    "bytes": 1786,
+    "sha256": "92572c1ba942ab511564982c31e099db320b63b65ce9b10167219911c111c934"
+  },
+  {
+    "path": "site/interaction-refine/detail-chapters.css",
+    "bytes": 2695,
+    "sha256": "9a3725ca768579981fce8cf91837b81a1906eeac3f1fd0e8378b80db05a2a41b"
+  },
+  {
+    "path": "site/interaction-refine/detail-chapters.js",
+    "bytes": 1804,
+    "sha256": "197a0a295c4c0fd8025517b9381f56c6225bb334e163adb21e28661407fbb86b"
+  },
+  {
+    "path": "site/interaction-refine/details.css",
+    "bytes": 5349,
+    "sha256": "206486f94a66202d690af78260d8a43b4b175acf95a52bb687f6d7fae7886c7b"
+  },
+  {
+    "path": "site/interaction-refine/details.js",
+    "bytes": 3597,
+    "sha256": "72d743d7ef7c5aa8afed27a5966332512db74550c0614a10e1bfed6175bc4ec8"
+  },
+  {
+    "path": "site/interaction-refine/film-motion.js",
+    "bytes": 4244,
+    "sha256": "20e08591ebcd44c50d9b93fcd685664f1d1074a11e63b7959af1477c750766a1"
+  },
+  {
+    "path": "site/interaction-refine/final-background.webp",
+    "bytes": 476898,
+    "sha256": "79a9b1caabdce4cee1baf49d06cfd5c8215f256643cbc3336d779814ac419046"
+  },
+  {
+    "path": "site/interaction-refine/interaction.js",
+    "bytes": 2000,
+    "sha256": "017c3e14715e90438744ad6907a8e0fd91de3ce694e6f3192765bc87e41a6063"
+  },
+  {
+    "path": "site/interaction-refine/loops/cover-upper.webp",
+    "bytes": 7870980,
+    "sha256": "6a72387500df48d96bc285c3073c77dd361d3dfb2efa6e7be3e17c6eb9e8e20b"
+  },
+  {
+    "path": "site/interaction-refine/motion-ip.js",
+    "bytes": 1816,
+    "sha256": "41e852482af346abd67fd4b33cc9e4704999dcfa48ab34657d7542ee7efdf073"
+  },
+  {
+    "path": "site/interaction-refine/motion.css",
+    "bytes": 15834,
+    "sha256": "3b824af7be39933c61e9d0667d7ae1e9ead54b54fbdcdef8367f174216cca0d0"
+  },
+  {
+    "path": "site/interaction-refine/northstar-screen.webp",
+    "bytes": 54488,
+    "sha256": "b45af5114177f77e25b358d22957d7c515a2d081cd2bc7229da1c26c3fd9c6d5"
+  },
+  {
+    "path": "site/interaction-refine/orbit-background.webp",
+    "bytes": 350320,
+    "sha256": "c32677a683baa84c4d2b40c51568c60a74fc56ed6227a6a0c61af4bf14aeec82"
+  },
+  {
+    "path": "site/interaction-refine/refinement.css",
+    "bytes": 5692,
+    "sha256": "c877ee4efe2b815387089b1fa7148bcb55f24e35b4449704a1e803677c699606"
+  },
+  {
+    "path": "site/interaction-refine/review.js",
+    "bytes": 3563,
+    "sha256": "ebcf09295f52fe2b817f700dd5b498dc812bc639af77dfe32051b50b17b3e71a"
+  },
+  {
+    "path": "site/interaction-refine/trajectory.html",
+    "bytes": 7026,
+    "sha256": "879a1a00d3fb3f0d0d6aa5abafea4c77a8d451893777c4504162965ff4fda199"
+  },
+  {
+    "path": "site/interaction-refine/wanghaixin-resume.pdf",
+    "bytes": 396351,
+    "sha256": "ce6707f8841d7f43acc307a5c1ed46fb4788f2329da3df364369467579f43517"
+  },
+  {
+    "path": "site/motion-refine/font.css",
+    "bytes": 10836,
+    "sha256": "5d1693f62aebcf1eee7196df3725d43c6c42b4baf04691be37560b7f6b00bf0e"
+  },
+  {
+    "path": "site/motion-refine/shoujin-0.ttf",
+    "bytes": 100744,
+    "sha256": "92bf9390417c50ab255d528727fcd560d858ed34fe6df300ffc6de7b4b44486c"
+  },
+  {
+    "path": "site/motion-refine/shoujin-1.ttf",
+    "bytes": 104180,
+    "sha256": "a3d259eb31cc3612975f860c277ae0b2e648a00c81c37e41c71fd2265a74c3b5"
+  },
+  {
+    "path": "site/motion-refine/shoujin-2.ttf",
+    "bytes": 111452,
+    "sha256": "64a538b4dafbce6a1d1a248f2406821e0826ac9cae60904eb3dfad66984b095d"
+  },
+  {
+    "path": "site/motion-refine/shoujin-3.ttf",
+    "bytes": 115148,
+    "sha256": "bcb5ec821e3db6078305728c2ddf9a2f5eb80a8e9a3f5051b00775a31f6d92b8"
+  },
+  {
+    "path": "site/motion-refine/shoujin-4.ttf",
+    "bytes": 113464,
+    "sha256": "990dfe3fb2de13133d6a88c81ade6cbdb7e013373be54dcb4118e044c5d579ce"
+  },
+  {
+    "path": "site/motion-refine/shoujin-5.ttf",
+    "bytes": 114016,
+    "sha256": "2c044554bef1046822a3478d786afbf08e0e051acd45d8aa11154321c75c2637"
+  },
+  {
+    "path": "site/motion-refine/shoujin-6.ttf",
+    "bytes": 117128,
+    "sha256": "4434b5ed16603d4bc156ed23a8fc8fc762ee49e65f4c7a9e44a7494f82b565e9"
+  },
+  {
+    "path": "site/motion-refine/shoujin-7.ttf",
+    "bytes": 67264,
+    "sha256": "fc23d11a10a6639ed128502aef6a4de8277f9136bb8669900bdbfd2162e6894e"
+  },
+  {
+    "path": "site/reference-refine/capability-plate.webp",
+    "bytes": 581750,
+    "sha256": "c2af267ff82db66cce84562125580671dcf2f4a5d310c7a248e4b9058467257c"
+  },
+  {
+    "path": "site/reference-refine/evidence-plate.webp",
+    "bytes": 361772,
+    "sha256": "f7d504be07272aa0187471d9f1d7c6955faae986ba855a365f24f15ebc5e48dc"
+  },
+  {
+    "path": "site/reference-refine/film-photos.webp",
+    "bytes": 296176,
+    "sha256": "9f11c0912317cac491a051559bc9d8e003f248448e37448b2c7272491290e105"
+  },
+  {
+    "path": "site/reference-refine/loops.json",
+    "bytes": 972,
+    "sha256": "bc20359956cba888491f9bf1a90d0aae387ea287bcd9e32b59713222c893363b"
+  },
+  {
+    "path": "site/reference-refine/loops/office-poster.png",
+    "bytes": 373769,
+    "sha256": "d5c65907384f73f77c242a5a5b4ab505fa806acba37a461c59a4aa5a367ca551"
+  },
+  {
+    "path": "site/reference-refine/loops/office.webp",
+    "bytes": 6150864,
+    "sha256": "dac30746c3eca65b2b6b97978788b3608e8e9b0e9e3cd63175dc0b5c5c9b6b59"
+  },
+  {
+    "path": "site/reference-refine/loops/phone-poster.png",
+    "bytes": 435955,
+    "sha256": "c937b3328f1c1a6d32c37e3ced6c562f32d9601713abc4f8d7d61a38ad77bcd7"
+  },
+  {
+    "path": "site/reference-refine/loops/phone.webp",
+    "bytes": 12189726,
+    "sha256": "d4df1c1d07756f15e7b5be0d489d5246036528bccc517286c916007052637c8a"
+  },
+  {
+    "path": "site/reference-refine/loops/playful-poster.png",
+    "bytes": 306391,
+    "sha256": "5df10ae6b79a6363153c0fdb4ee161b123327a174ee9ffb50a405457adc72a8e"
+  },
+  {
+    "path": "site/reference-refine/loops/playful.webp",
+    "bytes": 5460640,
+    "sha256": "dd1089d52c553bf47e2c58da9623bf31744c0696c796ceec35bd49d0e1d5881b"
+  },
+  {
+    "path": "site/reference-refine/loops/ski-poster.png",
+    "bytes": 626822,
+    "sha256": "37a3ed67f29db948d66173af8f42ce98c9e98964d6c7e5385458e1685d5adc2c"
+  },
+  {
+    "path": "site/reference-refine/loops/ski.webp",
+    "bytes": 5676460,
+    "sha256": "e6cefe17c934acce36763b35e75bbd3d42c38349d6b842d595260729157d5204"
+  },
+  {
+    "path": "site/reference-refine/loops/sport-poster.png",
+    "bytes": 335923,
+    "sha256": "b8b2221cf36fdde70d0d42851c8a7c6e2ef5c81d9914eb6690ab07316ebf262b"
+  },
+  {
+    "path": "site/reference-refine/loops/sport.webp",
+    "bytes": 6091446,
+    "sha256": "4692a5e18d0a35b747a6785a566b44d8181e4e9021e1702d6d411f297ce7a020"
+  },
+  {
+    "path": "site/reference-refine/motion-ip.js",
+    "bytes": 1816,
+    "sha256": "41e852482af346abd67fd4b33cc9e4704999dcfa48ab34657d7542ee7efdf073"
+  },
+  {
+    "path": "site/shared/assets/IP/transparent/办公.webp",
+    "bytes": 92986,
+    "sha256": "277dd6821f659d113bc5f466c90b83a05ff11511519eb11f72b6aa7441effd03"
+  },
+  {
+    "path": "site/shared/assets/IP/transparent/滑雪.webp",
+    "bytes": 166320,
+    "sha256": "da9e29c2a7612d3ddc45fbcfec916384e836b3d8b126d87d71af4692ec724c85"
+  },
+  {
+    "path": "site/shared/assets/IP/transparent/运动.webp",
+    "bytes": 114738,
+    "sha256": "2f017d596940e197a71e8c43d82a9386a62ca248c4e835bf9535c15a6ffa78e3"
+  },
+  {
+    "path": "site/shared/public/docs/wanghaixin-contact-card.jpg",
+    "bytes": 82474,
+    "sha256": "08113025efaf9c5693311b10146d40f8c30696f5422711d03c9b33a8743d5cbe"
+  },
+  {
+    "path": "site/trajectory-study/background-plate.webp",
+    "bytes": 499960,
+    "sha256": "c0928009a57e7efd44bc5da810ea538c64e887fd563271e906eb71ae03413ebe"
+  },
+  {
+    "path": "site/trajectory-study/study.css",
+    "bytes": 7352,
+    "sha256": "8c73e142272aaccb626fa9001176f33dbcac748d2d3fca8bfc5e2480df7fcd22"
+  },
+  {
+    "path": "site/trajectory-study/study.js",
+    "bytes": 1630,
+    "sha256": "b4b18b6bcbddbdd4610679e251eb80d3ecabe4ab0903627373dd083034218299"
+  }
+]
