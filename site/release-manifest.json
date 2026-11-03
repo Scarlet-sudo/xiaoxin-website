@@ -6,28 +6,28 @@
   },
   {
     "path": "capability/index.html",
-    "bytes": 5552,
-    "sha256": "3eacf427df10699a3af93072413cff8fa419931b80cf3ddee8e47b7b470164e3"
+    "bytes": 5622,
+    "sha256": "d245aac808e680f240dae0bcb62e27c4af685646c2c502fca4e229c95cb11ee6"
   },
   {
     "path": "character/index.html",
-    "bytes": 6832,
-    "sha256": "0f96e1918715b1065e32636ac72a666ec9738d2eab54262fc935b3c616c59b96"
+    "bytes": 6892,
+    "sha256": "57cdb255d105c5ce0d52fa75bdd89c939092b551dc38d10daf40ed7333dc9109"
   },
   {
     "path": "contact/index.html",
-    "bytes": 6568,
-    "sha256": "ba88034db539ede70a86e3159aef48a0d6db7341b6b2d3d95d7313ce7d49b017"
+    "bytes": 6668,
+    "sha256": "c97134801f862d21c336812a5cf4dc389a334f1ed7d911cd62d4c5626ec9d6d0"
   },
   {
     "path": "evidence/index.html",
-    "bytes": 6741,
-    "sha256": "f45e79604eaced3f09b5a65fdeec8f965d68527e9c0d8980244e93b73ec8d48b"
+    "bytes": 6801,
+    "sha256": "39b0214f686cf2e8b366059008aa69aac678a7c168646aac3fc9854ceae7c300"
   },
   {
     "path": "index.html",
-    "bytes": 7623,
-    "sha256": "ddd4f9cba0bcc77b0f62a789804494bf9442d1c51da75f4e9dfd00959929afe2"
+    "bytes": 7793,
+    "sha256": "d139a1487aaa288e34a3ba9bc93a50be13d7348e6369c62a1803d9e6e3f5f2d6"
   },
   {
     "path": "site/capability-study/background-plate.webp",
@@ -336,7 +336,7 @@
   },
   {
     "path": "trajectory/index.html",
-    "bytes": 5562,
-    "sha256": "713553d30275fe9cfc0ed2b9fd433e02c3c9856a18e15b5488f542068f05688e"
+    "bytes": 5632,
+    "sha256": "3f1e9ea8d8113479f654eed86a9eb8ec9f3f6e123881cb1f7c8ed2e7634de4df"
   }
 ]
